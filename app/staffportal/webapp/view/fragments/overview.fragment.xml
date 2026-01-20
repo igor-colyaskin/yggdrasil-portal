@@ -1,0 +1,45 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Table id="staffTable" 
+           items="{/Staff}" 
+           growing="true" 
+           growingThreshold="10"
+           mode="SingleSelectMaster"
+           selectionChange=".onEmployeeSelect">
+        <headerToolbar>
+            <OverflowToolbar id="staffTableToolbar">
+                <Title id="staffTableTitle" text="Сотрудники (HR Service v4)" />
+                <ToolbarSpacer id="staffTableToolbarSpacer" />
+                <SearchField id="staffTableSearchField" width="30%" search=".onSearchStaff" />
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column id="nameColumn">
+                <Text id="nameColumnText" text="Имя" />
+            </Column>
+            <Column id="departmentColumn">
+                <Text id="departmentColumnText" text="Отдел" />
+            </Column>
+            <Column id="positionColumn">
+                <Text id="positionColumnText" text="Позиция" />
+            </Column>
+            <Column hAlign="End" id="levelColumn">
+                <Text id="levelColumnText" text="Уровень" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem id="staffListItem" type="Navigation">
+                <cells>
+                    <Text id="nameCell" text="{name}" />
+                    <Text id="departmentCell" text="{department}" />
+                    <Text id="positionCell" text="{position}" />
+                    <ObjectStatus 
+                        id="levelCell"
+                        text="{level}" 
+                        state="{= ${level} === 'Senior' ? 'Success' : 'None' }" />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

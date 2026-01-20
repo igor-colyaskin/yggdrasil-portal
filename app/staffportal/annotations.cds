@@ -1,0 +1,1 @@
+using HRService as service from '../../srv/portal-service';

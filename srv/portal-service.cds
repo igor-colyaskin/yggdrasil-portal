@@ -6,7 +6,7 @@ service HRService @(path: '/odata/v4/hr') {
 }
 
 // Финансовый сервис (Будем имитировать OData v2)
-service FinanceService @(path: '/odata/v2/finance') {
+service FinanceService @(path: '/finance') {
     entity Payrolls as projection on db.Payrolls;
     entity Assets   as projection on db.TechnicalAssets;
 }
