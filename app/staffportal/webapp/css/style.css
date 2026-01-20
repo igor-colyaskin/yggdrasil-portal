@@ -1,1 +1,22 @@
-/* Enter your custom styles here */
+ /* [id$="container"] div  > div { */
+ /* #container div  > div { */
+ /* height: 100%;} */
+ [id$="container-uiarea"]>[id*="staffportal"] {
+     height: 100%;
+ }
+
+ /* 1. Начинаем с самого корня (index.html) */
+ /* #container, 
+#container-uiarea,
+[id*="container-com.epic.yggdrasil.staffportal"] {
+    height: 100% !important;
+} */
+
+ /* 2. Твоё Великое Заклинание, привязанное к ID твоего портала */
+ /* Это гарантирует, что магия не выйдет за пределы твоего приложения */
+
+ /* 3. Обязательно фиксим внутреннюю прослойку Page, 
+      которая в 99% случаев является виновником "прозрачности" */
+ /* .sapMPageContent {
+    height: 100% !important;
+} */

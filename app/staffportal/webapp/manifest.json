@@ -1,43 +1,25 @@
 {
-  "_version": "1.76.0",
+  "_version": "1.60.0",
   "sap.app": {
     "id": "com.epic.yggdrasil.staffportal",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "title": "Yggdrasil Saga Portal",
     "applicationVersion": {
       "version": "0.0.1"
-    },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "resources": "resources.json",
-    "sourceTemplate": {
-      "id": "@sap/generator-fiori:basic",
-      "version": "1.20.0",
-      "toolsId": "bc677586-25d7-4599-856d-e8191df904a7"
     },
     "dataSources": {
       "mainService": {
         "uri": "/odata/v4/hr/",
         "type": "OData",
         "settings": {
-          "annotations": [],
           "odataVersion": "4.0"
         }
       },
       "financeService": {
-        "uri": "/odata/v2/finance/",
+        "uri": "/odata/v2/finance",
         "type": "OData",
         "settings": {
-          "annotations": [],
           "odataVersion": "2.0"
-        }
-      },
-      "projectService": {
-        "uri": "/odata/v4/projects/",
-        "type": "OData",
-        "settings": {
-          "annotations": [],
-          "odataVersion": "4.0"
         }
       }
     }
@@ -61,58 +43,39 @@
   "sap.ui5": {
     "flexEnabled": true,
     "resourceRoots": {
-      "com.sap.fiorireuselibrary.ui5cardssdk": "./lib"
-    },
-    "dependencies": {
-      "minUI5Version": "1.143.2",
-      "libs": {
-        "sap.m": {},
-        "sap.ui.core": {},
-        "com.sap.fiorireuselibrary.ui5cardssdk": {}
-      }
+      "com.sap.fiorireuselibrary.ui5cardssdk": "./lib/ui5cardssdk"
     },
     "contentDensities": {
       "compact": true,
       "cozy": true
     },
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
     "models": {
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.epic.yggdrasil.staffportal.i18n.i18n",
-          "supportedLocales": [
-            "",
-            "en"
-          ],
-          "fallbackLocale": ""
+          "bundleName": "com.epic.yggdrasil.staffportal.i18n.i18n"
         }
       },
       "": {
         "dataSource": "mainService",
         "settings": {
           "synchronizationMode": "None",
-          "operationMode": "Server",
-          "autoExpandSelect": true
+          "operationMode": "Server"
         }
       },
       "finance": {
         "dataSource": "financeService",
-        "type": "sap.ui.model.odata.v2.ODataModel",
-        "settings": {
-          "defaultBindingMode": "TwoWay"
-        }
-      },
-      "projects": {
-        "dataSource": "projectService",
-        "settings": {
-          "synchronizationMode": "None"
-        }
+        "type": "sap.ui.model.odata.v2.ODataModel"
       },
       "ui": {
-        "type": "sap.ui.model.json.JSONModel",
-        "settings": {
-          "defaultBindingMode": "TwoWay"
-        }
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
     "resources": {
@@ -125,19 +88,16 @@
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "transition": "slide",
-        "type": "View",
         "viewType": "XML",
         "path": "com.epic.yggdrasil.staffportal.view",
-        "async": true,
-        "viewPath": "com.epic.yggdrasil.staffportal.view"
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "async": true
       },
       "routes": [
         {
           "name": "RouteStuff",
-          "pattern": ":?query:",
+          "pattern": "",
           "target": [
             "TargetStuff"
           ]
@@ -146,15 +106,17 @@
       "targets": {
         "TargetStuff": {
           "id": "Stuff",
-          "name": "Stuff"
+          "name": "Stuff",
+          "viewType": "XML",
+          "transition": "slide",
+          "viewLevel": 1
         }
       }
     },
     "rootView": {
-      "viewName": "com.epic.yggdrasil.staffportal.view.App",
+      "viewName": "com.epic.yggdrasil.staffportal.view.Stuff",
       "type": "XML",
-      "id": "App",
-      "async": true
+      "id": "App"
     }
   }
 }
