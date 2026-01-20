@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <IconTabBar id="mainTabBar" select=".onTabSelect" headerMode="Inline" class="sapUiNoContentPadding">
+        <items>
+            <IconTabFilter id="overviewTab" text="Overview" key="overview" />
+            <IconTabFilter id="financeTab" text="Finance (v2)" key="finance" />
+            <IconTabFilter id="projectsTab" text="Projects (v4)" key="projects" />
+        </items>
+    </IconTabBar>
+</core:FragmentDefinition>

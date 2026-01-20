@@ -1,0 +1,19 @@
+{
+    "hostCards": [
+        {
+            "id": "header_card",
+            "fragment": "HeaderCard",
+            "target": "header"
+        },
+        {
+            "id": "tabs_card",
+            "fragment": "NavigationTabs",
+            "target": "navigation"
+        },
+        {
+            "id": "staff_table_card",
+            "fragment": "StaffTable",
+            "target": "content"
+        }
+    ]
+}

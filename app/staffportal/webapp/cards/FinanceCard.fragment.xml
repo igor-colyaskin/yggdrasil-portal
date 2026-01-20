@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:cards="com.sap.fiorireuselibrary.ui5cardssdk.controls">
+    
+    <cards:CardControl 
+        id="financeGolem"
+        title="Finance Status"
+        description="OData v2 Protocol"
+        width="100%"
+        visible="{ui>/isEmployeeSelected}">
+        </cards:CardControl>
+</core:FragmentDefinition>

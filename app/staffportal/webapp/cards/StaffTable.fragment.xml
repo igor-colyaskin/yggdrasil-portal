@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Table id="staffTable1" items="{/Staff}" mode="SingleSelectMaster" selectionChange=".onEmployeeSelect">
+        <columns>
+            <Column id="nameColumn1"><Text id="nameColumnText1" text="Сотрудник" /></Column>
+            <Column id="roleColumn1"><Text id="roleColumnText1" text="Должность" /></Column>
+        </columns>
+        <items>
+            <ColumnListItem id="staffTableItem1">
+                <cells>
+                    <Text id="nameCell1" text="{name}" />
+                    <Text id="roleCell1" text="{role}" />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

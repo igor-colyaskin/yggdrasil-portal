@@ -1,27 +1,11 @@
-<mvc:View
-    controllerName="com.epic.yggdrasil.staffportal.controller.Stuff"
+<mvc:View controllerName="com.epic.yggdrasil.staffportal.controller.App"
+    displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:f="sap.f"
-    displayBlock="true">
-    <Page id="page" title="{i18n>title}">
-        <headerContent>
-            <ObjectStatus id="devServerStatus" text="DEV SERVER" state="Warning" icon="sap-icon://instance" class="sapUiSmallMarginEnd" />
-        </headerContent>
-        <content>
-            <IconTabBar id="idIconTabBar" select=".onTabSelect" stretchContentHeight="true" class="sapUiResponsiveContentPadding">
-                <items>
-                    <IconTabFilter id="overviewTab" key="overview" text="Staff Overview" icon="sap-icon://employee-lookup">
-                        <VBox id="overviewContainer" />
-                    </IconTabFilter>
-                    <IconTabFilter id="financeTab" key="finance" text="Finance &amp; Assets" icon="sap-icon://money-bills">
-                        <VBox id="financeContainer" />
-                    </IconTabFilter>
-                    <IconTabFilter id="projectsTab" key="projects" text="Project Utilization" icon="sap-icon://project-definition">
-                        <VBox id="projectsContainer" />
-                    </IconTabFilter>
-                </items>
-            </IconTabBar>
-        </content>
-    </Page>
+    xmlns="sap.m">
+    <f:GridContainer id="hostGrid">
+        <core:Fragment fragmentName="com.epic.yggdrasil.staffportal.view.fragments.FinanceCard" type="XML" />
+        <core:Fragment fragmentName="com.epic.yggdrasil.staffportal.view.fragments.ProjectCard" type="XML" />
+    </f:GridContainer>
 </mvc:View>

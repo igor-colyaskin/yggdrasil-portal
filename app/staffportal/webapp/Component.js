@@ -1,26 +1,12 @@
 sap.ui.define([
-    "sap/ui/core/UIComponent",
-    "com/epic/yggdrasil/staffportal/model/models"
-], (UIComponent, models) => {
-    "use strict";
-
+    "sap/ui/core/UIComponent"
+], function (UIComponent) {
+    "use strict"
     return UIComponent.extend("com.epic.yggdrasil.staffportal.Component", {
-        metadata: {
-            manifest: "json",
-            interfaces: [
-                "sap.ui.core.IAsyncContentCreation"
-            ]
-        },
-
-        init() {
-            // call the base component's init function
-            UIComponent.prototype.init.apply(this, arguments);
-
-            // set the device model
-            this.setModel(models.createDeviceModel(), "device");
-
-            // enable routing
-            this.getRouter().initialize();
+        metadata: { manifest: "json" },
+        init: function () {
+            UIComponent.prototype.init.apply(this, arguments)
+            this.getRouter().initialize()
         }
-    });
-});
+    })
+})
