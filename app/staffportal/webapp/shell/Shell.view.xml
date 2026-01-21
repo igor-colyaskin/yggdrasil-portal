@@ -6,13 +6,14 @@
     displayBlock="true">
     <App id="staffApp">
         <pages>
-            <Page title="Yggdrasil Staff Portal" showHeader="false">
+            <Page id="_IDGenPage1" title="Yggdrasil Staff Portal" showHeader="false">
                 <content>
                     <w:Card 
                         id="headerCard" 
+                        host="epicHost"
                         manifest="./cards/HeaderCard/manifest.json">
                         <w:layoutData>
-                            <FlexItemData growFactor="1" />
+                            <FlexItemData id="_IDGenFlexItemData" growFactor="1" />
                         </w:layoutData>
                     </w:Card>
                 </content>

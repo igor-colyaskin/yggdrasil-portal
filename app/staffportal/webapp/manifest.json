@@ -1,11 +1,25 @@
 {
   "_version": "1.60.0",
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    },
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "tablet": ""
+    }
+  },
   "sap.app": {
     "id": "com.epic.yggdrasil.staffportal",
     "type": "application",
     "title": "Yggdrasil Saga Portal",
     "applicationVersion": {
-      "version": "0.0.1"
+      "version": "1.0.0"
     },
     "dataSources": {
       "mainService": {
@@ -24,37 +38,29 @@
       }
     }
   },
-  "sap.ui": {
-    "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    }
-  },
   "sap.ui5": {
-    "flexEnabled": true,
-    "resourceRoots": {
-      "com.sap.fiorireuselibrary.ui5cardssdk": "./lib/ui5cardssdk"
-    },
     "contentDensities": {
       "compact": true,
       "cozy": true
+    },
+    "flexEnabled": true,
+    "rootView": {
+      "viewName": "com.epic.yggdrasil.staffportal.shell.Shell",
+      "type": "XML",
+      "async": true,
+      "id": "shellView"
     },
     "dependencies": {
       "minUI5Version": "1.120.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.integration": {}
       }
+    },
+    "resourceRoots": {
+      "com.sap.fiorireuselibrary.ui5cardssdk": "./lib/sdkcard"
     },
     "models": {
       "i18n": {
@@ -64,59 +70,29 @@
         }
       },
       "": {
-        "dataSource": "mainService",
-        "settings": {
-          "synchronizationMode": "None",
-          "operationMode": "Server"
-        }
-      },
-      "finance": {
-        "dataSource": "financeService",
-        "type": "sap.ui.model.odata.v2.ODataModel"
-      },
-      "ui": {
-        "type": "sap.ui.model.json.JSONModel"
+        "dataSource": "mainService"
       }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
     },
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
-        "path": "com.epic.yggdrasil.staffportal.view",
-        "controlId": "app",
+        "controlId": "staffApp",
         "controlAggregation": "pages",
         "async": true
       },
       "routes": [
         {
-          "name": "RouteStuff",
+          "name": "master",
           "pattern": "",
-          "target": [
-            "TargetStuff"
-          ]
+          "target": "master"
         }
       ],
       "targets": {
-        "TargetStuff": {
-          "id": "Stuff",
-          "name": "Stuff",
-          "viewType": "XML",
-          "transition": "slide",
-          "viewLevel": 1
+        "master": {
+          "viewName": "com.epic.yggdrasil.staffportal.shell.Shell"
         }
       }
-    },
-    "rootView": {
-      "viewName": "com.epic.yggdrasil.staffportal.view.Stuff",
-      "type": "XML",
-      "id": "App"
     }
   }
 }
