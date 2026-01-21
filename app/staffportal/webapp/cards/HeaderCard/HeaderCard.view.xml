@@ -1,0 +1,8 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.cards.HeaderCard.HeaderCard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <HeaderContainer id="headerContainer">
+        <Text text="Я — настоящий компонент!" />
+    </HeaderContainer>
+</mvc:View>

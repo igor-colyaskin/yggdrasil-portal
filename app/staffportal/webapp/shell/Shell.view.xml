@@ -1,0 +1,22 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.shell.Shell"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns="sap.m"
+    displayBlock="true">
+    <App id="staffApp">
+        <pages>
+            <Page title="Yggdrasil Staff Portal" showHeader="false">
+                <content>
+                    <w:Card 
+                        id="headerCard" 
+                        manifest="./cards/HeaderCard/manifest.json">
+                        <w:layoutData>
+                            <FlexItemData growFactor="1" />
+                        </w:layoutData>
+                    </w:Card>
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>

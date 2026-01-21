@@ -1,0 +1,47 @@
+{
+    "_version": "1.12.0",
+    "sap.app": {
+        "id": "com.epic.yggdrasil.staffportal.shell",
+        "type": "application",
+        "title": "Staff Portal Shell"
+    },
+    "sap.ui5": {
+        "rootView": {
+            "viewName": "com.epic.yggdrasil.staffportal.shell.Shell",
+            "type": "XML",
+            "async": true,
+            "id": "shellView"
+        },
+        "dependencies": {
+            "minUI5Version": "1.120.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {}
+            }
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "viewPath": "com.epic.yggdrasil.staffportal.shell",
+                "controlId": "staffApp",
+                "controlAggregation": "pages",
+                "async": true
+            },
+            "routes": [
+                {
+                    "name": "master",
+                    "pattern": "",
+                    "target": "master"
+                }
+            ],
+            "targets": {
+                "master": {
+                    "viewName": "Shell",
+                    "viewId": "shellView"
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,0 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-    <HBox id="headerBox" justifyContent="SpaceBetween" alignItems="Center">
-        <Title id="title" text="Yggdrasil Staff Portal" level="H1" />
-        <ObjectStatus id="status" text="{ui>/serverName}" state="{ui>/serverState}" icon="sap-icon://instance" />
-    </HBox>
-</core:FragmentDefinition>
