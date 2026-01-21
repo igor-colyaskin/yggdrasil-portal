@@ -1,0 +1,14 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.cards.NavCard.NavCard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <VBox class="sapUiSmallMargin">
+        <Title text="Панель управления Хедера" />
+        <Text text="Нажми кнопку, чтобы послать сигнал через Резонантор" />
+        <Button 
+            text="Запустить импульс" 
+            press=".onSendSignal" 
+            type="Emphasized" 
+            class="sapUiSmallMarginTop" />
+    </VBox>
+</mvc:View>

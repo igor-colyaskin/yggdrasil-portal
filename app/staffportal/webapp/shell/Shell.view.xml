@@ -8,14 +8,36 @@
         <pages>
             <Page id="_IDGenPage1" title="Yggdrasil Staff Portal" showHeader="false">
                 <content>
-                    <w:Card 
-                        id="headerCard" 
-                        host="epicHost"
-                        manifest="./cards/HeaderCard/manifest.json">
-                        <w:layoutData>
-                            <FlexItemData id="_IDGenFlexItemData" growFactor="1" />
-                        </w:layoutData>
-                    </w:Card>
+                    <VBox id="mainVBox" fitContainer="true">
+                        <w:Card 
+                            id="headerCard" 
+                            host="epicHost" 
+                            manifest="./cards/HeaderCard/manifest.json" />
+                        <w:Card 
+                            id="navCard" 
+                            host="epicHost" 
+                            manifest="./cards/NavCard/manifest.json" />
+                        <VBox 
+                            id="staffVBox" 
+                            visible="{context>/currentTab === 'staff'}">
+                            <w:Card 
+                                id="filterCard" 
+                                host="epicHost" 
+                                manifest="./cards/FilterCard/manifest.json" />
+                            <w:Card 
+                                id="staffTableCard" 
+                                host="epicHost" 
+                                manifest="./cards/StaffTable/manifest.json" />
+                        </VBox>
+                        <VBox 
+                            id="financeVBox" 
+                            visible="{context>/currentTab === 'finance'}">
+                            <w:Card 
+                                id="financeCard" 
+                                host="epicHost" 
+                                manifest="./cards/FinanceCard/manifest.json" />
+                        </VBox>
+                    </VBox>
                 </content>
             </Page>
         </pages>

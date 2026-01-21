@@ -12,6 +12,28 @@ sap.ui.define([
         init: function () {
             // 1. Создаем физический объект Хоста
             this._oHost = new Host("epicHost")
+            // 1. Создаем локальное хранилище состояния (наш Контекст)
+            this._mContext = {
+                "currentTab": "staff",
+                "userRole": "Wizard"
+            }
+
+            // 2. Метод установки контекста (мы будем вызывать его из NavCard)
+            this._oHost.setContext = function (mNewContext) {
+                Object.assign(this._mContext, mNewContext)
+
+                // ВАЖНО: Уведомляем все карточки, что контекст изменился
+                // Это заставит их пересчитать биндинги вроде {context>/currentTab}
+                this._oHost.fireConfigurationChange()
+            }.bind(this)
+
+            // 3. ОБЯЗАТЕЛЬНЫЙ МЕТОД: именно его ищет карточка, 
+            // когда видит префикс 'context>' в своем манифесте
+            this._oHost.getContext = function () {
+                return Promise.resolve(this._mContext)
+            }.bind(this)
+
+
 
             // 2. Создаем "сердце" Резонантора — шину событий
             // Мы используем EventProvider, так как это легкий стандартный способ UI5
