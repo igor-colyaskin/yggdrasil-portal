@@ -22,7 +22,8 @@ sap.ui.define([
             this._oHost.getContext = () => Promise.resolve(this._mContext)
             this._oHost.setContext = (mCtx) => {
                 Object.assign(this._mContext, mCtx)
-                this._oHost.fireConfigurationChange()
+                this._oHost.fireEvent("configurationChange")
+                console.log("🌐 [Host Context]: Обновлен", this._mContext)
             }
 
             // Внедряем методы Резонантора
