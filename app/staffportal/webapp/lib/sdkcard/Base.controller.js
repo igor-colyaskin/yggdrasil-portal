@@ -1,69 +1,54 @@
-// webapp/lib/sdkcard/Base.controller.js
 sap.ui.define([
     "sap/ui/core/mvc/Controller"
 ], function (Controller) {
     "use strict"
 
-    return Controller.extend("com.epic.yggdrasil.staffportal.lib.sdkcard.Base.controller", {
+    return Controller.extend("com.epic.yggdrasil.staffportal.lib.sdkcard.Base", {
 
-        // Быстрый доступ к объекту интеграционной карточки
+        /**
+         * Быстрый доступ к инстансу интеграционной карточки
+         * @returns {sap.ui.integration.widgets.Card}
+         */
         getCard: function () {
+            // В Component-карточках объект передается через componentData
             return this.getOwnerComponent().getComponentData().__sapUiIntegration_card
         },
 
-        // Быстрый доступ к Хосту - non working
-        // getCardHost: function () {
-        //     const oCard = this.getCard()
-        //     return oCard ? oCard.getHostInstance() : null
-        // },
+        /**
+         * Получение объекта Host (epicHost) через карточку
+         * @returns {sap.ui.integration.Host|null}
+         */
         getCardHost: function () {
-            const oComponent = this.getOwnerComponent()
-            const oCompData = oComponent.getComponentData()
-
-            // 1. Пытаемся достать объект карточки
-            const oCard = oCompData && oCompData.__sapUiIntegration_card
-
-            // if (oCard) {
-                let vHost = oCard.getHostInstance()
-
-                // Если вернулась строка (ID), превращаем её в объект
-                // if (typeof vHost === "string") {
-                //     vHost = sap.ui.getCore().byId(vHost) || sap.ui.getCore().getComponent(vHost)
-                // }
-
-                // Если всё еще не объект, пробуем через старый добрый метод сапа
-                // if (!vHost || typeof vHost === "string") {
-                    // Ищем среди всех элементов по ID
-                    vHost = sap.ui.getCore().byId("epicHost")
-                // }
-
-                // if (vHost && typeof vHost === "object") {
-                    return vHost
-                // }
-            // }
-
-            // План "В": Прямое обращение к Хосту через главный компонент Шелла
-            // Это самый надежный способ в нашей архитектуре
-            // const oMainComponent = sap.ui.getCore().getComponent(oComponent.getManifestEntry("/sap.ui5/extends/component") || "")
-            // if (oMainComponent && oMainComponent.getHost) {
-            //     return oMainComponent.getHost()
-            // }
-
-            // return null
+            const oCard = this.getCard()
+            return oCard ? oCard.getHostInstance() : null
         },
-        // Прокси для публикации событий
+
+        /**
+         * Прокси для публикации событий в "Эфирный Резонантор"
+         * @param {string} sEventName Имя события
+         * @param {object} oData Данные
+         */
         publish: function (sEventName, oData) {
             const oHost = this.getCardHost()
-            if (oHost && oHost.publishEvent) {
+            if (oHost && typeof oHost.publishEvent === "function") {
                 oHost.publishEvent(sEventName, oData)
+            } else {
+                console.error(`🔴 [SDK]: Не удалось опубликовать событие ${sEventName}. Хост не найден.`)
             }
         },
 
-        // Прокси для подписки
+        /**
+         * Прокси для подписки на события Резонантора
+         * @param {string} sEventName Имя события
+         * @param {function} fnHandler Функция-обработчик
+         */
         subscribe: function (sEventName, fnHandler) {
             const oHost = this.getCardHost()
-            if (oHost && oHost.subscribeEvent) {
+            if (oHost && typeof oHost.subscribeEvent === "function") {
+                // Передаем 'this' третьим аргументом, чтобы сохранить контекст контроллера в обработчике
                 oHost.subscribeEvent(sEventName, fnHandler, this)
+            } else {
+                console.warn(`🟡 [SDK]: Подписка на ${sEventName} отложена. Хост пока недоступен.`)
             }
         }
     })

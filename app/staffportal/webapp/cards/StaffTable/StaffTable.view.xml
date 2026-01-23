@@ -2,7 +2,33 @@
     controllerName="com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <VBox class="sapUiSmallMargin">
-        <Title text="Staff Table" />
-    </VBox>
+    <Table 
+        id="innerStaffTable"
+        items="{path: 'staffModel>/items', parameters: {$count: true}}"
+        growing="true"
+        growingThreshold="10"
+        sticky="HeaderToolbar,ColumnHeaders">
+        <columns>
+            <Column width="15rem">
+                <Text text="Сотрудник" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="Департамент" />
+            </Column>
+            <Column hAlign="End">
+                <Text text="Уровень" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <ObjectIdentifier title="{staffModel>name}" text="{staffModel>email}" />
+                    <Text text="{staffModel>department}" />
+                    <ObjectStatus 
+                        text="{staffModel>level}" 
+                        state="{= ${staffModel>level} === 'Senior' ? 'Success' : 'None' }" />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
 </mvc:View>

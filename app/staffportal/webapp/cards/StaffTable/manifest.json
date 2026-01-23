@@ -5,15 +5,16 @@
   },
   "sap.card": {
     "type": "Component",
-    "header": {
-      "title": "Информация о сотруднике",
-      "subTitle": "Детальный вид",
-      "icon": { "src": "sap-icon://person-placeholder" }
-    },
     "configuration": {
-      "parameters": {
-        "selectedId": { "value": "init" }
+      "destinations": {
+        "hrService": {
+          "name": "hrService"
+        }
       }
+    },
+    "header": {
+      "title": "Сотрудники",
+      "subTitle": "Список персонала (v4)"
     }
   },
   "sap.ui5": {

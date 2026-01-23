@@ -5,7 +5,8 @@ sap.ui.define([
 
     return UIComponent.extend("com.epic.yggdrasil.staffportal.cards.NavCard.Component", {
         metadata: {
-            manifest: "json"
+            manifest: "json",
+            interfaces: ["sap.ui.core.IAsyncContentCreation"]
         },
         
         init: function () {
