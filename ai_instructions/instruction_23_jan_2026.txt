@@ -1,0 +1,123 @@
+v. 23 Jan 2026
+    app/
+    └── staffportal/
+        ├── .appGenInfo.json
+        ├── annotations.cds
+        ├── package.json
+        ├── README.md
+        ├── ui5.yaml
+        └── webapp/
+            ├── index.html
+            ├── Component.js           (ГЛАВНЫЙ компонент, лежит в корне!)
+            ├── manifest.json          (ГЛАВНЫЙ манифест, лежит в корне!)
+            │
+            ├── shell/                 (Папка для ресурсов портала-оболочки)
+            │   ├── Shell.view.xml
+            │   └── Shell.controller.js
+            │
+            ├── cards/                 (карточки-компоненты)
+            │   └── FilterCard/ ...
+            │   └── FinanceCard/ ...
+            │   └── HeaderCard/
+            │       └── Component.js
+            │       └── HeaderCard.controller.js
+            │       └── HeaderCard.view.xml
+            │       └── manifest.json
+            │   └── NavCard/ ...
+            │   └── StaffTable/ ...
+            │
+            ├── helpers/               
+            │   └── CardManager.js
+            │   └── EtherResonator.js
+            │
+            ├── lib/                   (SDK)
+            │   └── sdkcard/
+            │       └── Base.controller.js
+            │       └── StorageUtils.js
+            │
+            ├── i18n/
+            │   └── i18n.properties    (Общие тексты Шелла)
+            └── model/
+
+
+instruction for appGenInfo
+
+проект yggdrasil-portal:
+цель проекта - построить приложение на концепции Хост => интеграционные карточки типа Component.
+BE: SAP CAP (OData v4) + (OData v2 via installed v2 adapter) + REST
+
+schema.cds:
+
+namespace com.epic.yggdrasil;
+
+using {
+    managed,
+    cuid
+} from '@sap/cds/common';
+
+// --- СИСТЕМА 1: HR Portal (Основные данные) ---
+entity Employees : cuid, managed {
+    name       : String(100);
+    department : String(50); // IT, Finance, HR
+    position   : String(50); // Senior Developer, HR Manager
+    email      : String(100);
+    level      : String(10); // Junior, Middle, Senior
+}
+
+// --- СИСТЕМА 2: Finance & Assets (Бухгалтерия и Техника) ---
+entity Payrolls : cuid {
+    employeeId : UUID; // Ссылка на Employees.id
+    salary     : Decimal(15, 2);
+    currency   : String(3) default 'RUB';
+    equipment  : Composition of many TechnicalAssets
+                     on equipment.owner = $self;
+}
+
+entity TechnicalAssets : cuid {
+    owner     : Association to Payrolls;
+    type      : String(20); // Laptop, Monitor, Phone
+    model     : String(50);
+    serialNum : String(30);
+}
+
+// --- СИСТЕМА 3: Project Office (Загрузка в проектах) ---
+entity ProjectAssignments : cuid {
+    employeeId    : UUID;
+    projectName   : String(100);
+    roleInProject : String(50);
+    utilization   : Integer; // % загрузки (например, 50 или 100)
+}
+
+// --- СИСТЕМА 4: Coworking (Бронирование мест) ---
+entity Bookings : cuid {
+    employeeId : UUID;
+    deskNumber : String(10);
+    date       : Date;
+}
+
+portal-service.cds:
+
+using {com.epic.yggdrasil as db} from '../db/schema';
+
+// HR Сервис (OData v4) - Наш "Overview"
+service HRService @(path: '/odata/v4/hr') {
+    entity Staff as projection on db.Employees;
+}
+
+// Финансовый сервис (Будем имитировать OData v2)
+service FinanceService @(path: '/finance') {
+    entity Payrolls as projection on db.Payrolls;
+    entity Assets   as projection on db.TechnicalAssets;
+}
+
+// Производственный сервис (Для карточек проектов)
+service ProjectService @(path: '/odata/v4/projects') {
+    entity Assignments as projection on db.ProjectAssignments;
+}
+
+application has vertical layout:
+header card
+navigation card with tabs: the first tab is Overview, the rest can be placeholder for now.
+    when we click Overview we see filter card
+    and below staffTable card below
+    when we click other placeholder tab we see a finance card (= placeholder for now)

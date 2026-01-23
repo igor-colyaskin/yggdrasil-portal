@@ -13,7 +13,7 @@
                             id="headerCard" 
                             host="epicHost" 
                             manifest="./cards/HeaderCard/manifest.json" />
-                        <w:Card 
+                        <!-- <w:Card 
                             id="navCard" 
                             host="epicHost" 
                             manifest="./cards/NavCard/manifest.json" />
@@ -36,7 +36,7 @@
                                 id="financeCard" 
                                 host="epicHost" 
                                 manifest="./cards/FinanceCard/manifest.json" />
-                        </VBox>
+                        </VBox> -->
                     </VBox>
                 </content>
             </Page>
