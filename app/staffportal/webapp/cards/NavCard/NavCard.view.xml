@@ -4,6 +4,7 @@
     xmlns="sap.m">
     <IconTabBar 
         id="navTabBar" 
+        selectedKey="{ui>/currentTab}"
         select=".onTabSelect" 
         headerMode="Inline" 
         stretchContentHeight="true"

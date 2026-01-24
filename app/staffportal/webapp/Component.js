@@ -1,42 +1,83 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/integration/Host",
-    "sap/ui/base/EventProvider"
-], function (UIComponent, Host, EventProvider) {
+    "sap/ui/base/EventProvider",
+    "sap/ui/model/json/JSONModel",
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/StorageUtils"
+], function (UIComponent, Host, EventProvider, JSONModel, StorageUtils) {
     "use strict";
 
     return UIComponent.extend("com.epic.yggdrasil.staffportal.Component", {
         metadata: { manifest: "json" },
 
         init: function () {
-            // Сначала инициализируем базовый компонент
+            // 1. Инициализируем хранилище сразу
+            StorageUtils.createStorage("YGG_PORTAL_2026");
+
+            // 2. Инициализируем UI-модель (состояние)
+            this._initUIModel();
+
+            // 3. Базовая инициализация UIComponent
             UIComponent.prototype.init.apply(this, arguments);
-            // Затем настраиваем Хост (инфраструктуру)
+
+            // 4. Настройка Хоста (инфраструктуры)
             this._setupHost();
         },
 
         /**
-         * Настройка "epicHost" и "Эфирного Резонантора"
+         * Инициализация глобальной модели состояния портала.
+         * Данные из этой модели будут пробрасываться в карточки.
+         */
+        _initUIModel: function () {
+            const oInitialState = {
+                selectedEmployeeID: StorageUtils.readItem("selectedID") || "",
+                currentTab: "staff",
+                userRole: "Wizard",
+                // Конфигурация карточек (можно вынести в отдельный JSON файл при желании)
+                cards: [
+                    { id: "headerCard", containerId: "headerSection", manifest: "./cards/HeaderCard/manifest.json" },
+                    { id: "navCard", containerId: "navSection", manifest: "./cards/NavCard/manifest.json" },
+                    { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" }
+                ]
+            };
+
+            const oModel = new JSONModel(oInitialState);
+            this.setModel(oModel, "ui");
+        },
+
+        /**
+         * Настройка "epicHost", "Эфирного Резонантора" и Context Bridge
          */
         _setupHost: function () {
             this._oHost = new Host("epicHost");
-            this._mContext = { "currentTab": "staff", "userRole": "Wizard" };
+            this._oResonator = new EventProvider();
+            const oUiModel = this.getModel("ui");
 
-            // --- Shared Context Management ---
-            this._oHost.getContext = () => Promise.resolve(this._mContext);
+            // --- 1. Shared Context Management (через UI модель) ---
+            // Теперь контекст Хоста всегда возвращает актуальные данные из нашей модели "ui"
+            this._oHost.getContext = () => {
+                return Promise.resolve(oUiModel.getData());
+            };
             
             this._oHost.setContext = (mCtx) => {
                 if (mCtx) {
-                    Object.assign(this._mContext, mCtx);
+                    // Обновляем модель (это автоматически обновит биндинги во всех карточках)
+                    Object.keys(mCtx).forEach(sKey => {
+                        oUiModel.setProperty("/" + sKey, mCtx[sKey]);
+                    });
+                    
+                    // Если изменился ID — сохраняем в Storage
+                    if (mCtx.selectedEmployeeID) {
+                        StorageUtils.setItem("selectedID", mCtx.selectedEmployeeID);
+                    }
+
                     // Уведомляем карточки об изменении конфигурации
                     this._oHost.fireEvent("configurationChange");
-                    console.log("🌐 [Host Context]: Updated", this._mContext);
+                    console.log("🌐 [Host Context]: Updated & Persisted", oUiModel.getData());
                 }
             };
 
-            // --- Эфирный Резонантор (PubSub) ---
-            this._oResonator = new EventProvider();
-
+            // --- 2. Эфирный Резонантор (PubSub) ---
             this._oHost.publishEvent = (sName, oData) => {
                 this._oResonator.fireEvent(sName, oData);
                 console.log(`📡 [Resonator]: Published -> ${sName}`, oData);
@@ -46,15 +87,20 @@ sap.ui.define([
                 this._oResonator.attachEvent(sName, fnCallback, oListener);
             };
 
-            // --- Default Destination Resolver (Safety Net) ---
+            // --- 3. Destination Resolver ---
+            // Централизованное управление адресами сервисов
             this._oHost.resolveDestination = (sName) => {
-                console.warn(`⚠️ [Host]: resolveDestination for '${sName}' called before Shell initialization.`);
-                return ""; 
+                const mDestinations = {
+                    "hrService": "/odata/v4/hr",
+                    "financeService": "/finance",
+                    "projectService": "/odata/v4/projects"
+                };
+                return mDestinations[sName] || ""; 
             };
         },
 
         /**
-         * Публичный доступ к Хосту для контроллеров
+         * Публичный доступ к Хосту для контроллеров и карточек
          */
         getHost: function () { 
             return this._oHost; 

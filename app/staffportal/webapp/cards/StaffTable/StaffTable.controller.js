@@ -1,35 +1,35 @@
 sap.ui.define([
     "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/StorageUtils"
-], function (BaseController, StorageUtils) {
+    "sap/m/MessageToast"
+], function (BaseController, MessageToast) {
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable", {
+
         onInit: function () { },
 
         /**
          * Событие клика по кнопке "Set as Filter"
          */
         onSetAsFilter: function (oEvent) {
-            // Получаем контекст строки таблицы
-            const oCtx = oEvent.getSource().getBindingContext() // Это контекст OData v4
-            const sID = oCtx.getProperty("ID") // Или как называется поле ID в твоем бэкенде
+            // 1. Получаем контекст строки (OData v4)
+            const oCtx = oEvent.getSource().getBindingContext()
+            if (!oCtx) return
+
+            const sID = oCtx.getProperty("ID")
             const sName = oCtx.getProperty("name")
 
-            // 1. Пишем в Storage через прокси
-            StorageUtils.setItem("selectedID", sID)
+            // 2. Обновляем состояние через SDK (BaseController)
+            // Это обновит модель "ui", вызовет Host.setContext и сохранит ID в Storage
+            this.setUIProperty("selectedEmployeeID", sID)
 
-            // 2. Обновляем глобальную модель (она безымянная, доступна через Shell)
-            const oGlobalModel = this.getOwnerComponent().getModel()
-            oGlobalModel.setProperty("/selectedEmployeeID", sID)
-
-            // 3. Уведомляем систему через Резонантор
+            // 3. Уведомляем систему через Эфирный Резонантор
             this.publish("Employee_Selected", {
                 id: sID,
                 name: sName
             })
 
-            sap.m.MessageToast.show("Сотрудник зафиксирован: " + sName)
+            MessageToast.show(`Сотрудник ${sName} выбран как фильтр`)
         }
     })
 })

@@ -3,11 +3,10 @@ sap.ui.define([
 ], function (Controller) {
     "use strict"
 
-    return Controller.extend("com.epic.yggdrasil.staffportal.lib.sdkcard.Base", {
+    return Controller.extend("com.epic.yggdrasil.staffportal.lib.sdkcard.Base.controller", {
 
         /**
          * Быстрый доступ к инстансу интеграционной карточки
-         * @returns {sap.ui.integration.widgets.Card}
          */
         getCard: function () {
             // В Component-карточках объект передается через componentData
@@ -16,7 +15,6 @@ sap.ui.define([
 
         /**
          * Получение объекта Host (epicHost) через карточку
-         * @returns {sap.ui.integration.Host|null}
          */
         getCardHost: function () {
             const oCard = this.getCard()
@@ -24,31 +22,45 @@ sap.ui.define([
         },
 
         /**
+         * Быстрый доступ к UI-состоянию (модель "ui")
+         * @param {string} sPath Путь к свойству (например, "/selectedEmployeeID")
+         */
+        getUIProperty: function (sPath) {
+            return this.getOwnerComponent().getModel("ui").getProperty(sPath)
+        },
+
+        /**
+         * Установка значения в UI-состояние через Host (для синхронизации со Storage)
+         */
+        setUIProperty: function (sKey, vValue) {
+            const oHost = this.getCardHost()
+            if (oHost && typeof oHost.setContext === "function") {
+                const oUpdate = {}
+                oUpdate[sKey] = vValue
+                oHost.setContext(oUpdate)
+            }
+        },
+
+        /**
          * Прокси для публикации событий в "Эфирный Резонантор"
-         * @param {string} sEventName Имя события
-         * @param {object} oData Данные
          */
         publish: function (sEventName, oData) {
             const oHost = this.getCardHost()
             if (oHost && typeof oHost.publishEvent === "function") {
                 oHost.publishEvent(sEventName, oData)
             } else {
-                console.error(`🔴 [SDK]: Не удалось опубликовать событие ${sEventName}. Хост не найден.`)
+                console.error(`🔴 [SDK]: Не удалось опубликовать событие ${sEventName}.`)
             }
         },
 
         /**
          * Прокси для подписки на события Резонантора
-         * @param {string} sEventName Имя события
-         * @param {function} fnHandler Функция-обработчик
          */
         subscribe: function (sEventName, fnHandler) {
             const oHost = this.getCardHost()
             if (oHost && typeof oHost.subscribeEvent === "function") {
-                // Передаем 'this' третьим аргументом, чтобы сохранить контекст контроллера в обработчике
+                // 'this' передается третьим аргументом для сохранения контекста контроллера
                 oHost.subscribeEvent(sEventName, fnHandler, this)
-            } else {
-                console.warn(`🟡 [SDK]: Подписка на ${sEventName} отложена. Хост пока недоступен.`)
             }
         }
     })
