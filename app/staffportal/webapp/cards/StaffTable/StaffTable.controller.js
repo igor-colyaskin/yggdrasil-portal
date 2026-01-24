@@ -1,53 +1,35 @@
 sap.ui.define([
     "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
-    "sap/ui/model/json/JSONModel"
-], function (BaseController, JSONModel) {
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/StorageUtils"
+], function (BaseController, StorageUtils) {
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable", {
-
-        onInit: function () {
-            // 1. Инициализируем именованную модель с начальным состоянием
-            const oStaffModel = new JSONModel({
-                items: [],
-                isBusy: true
-            })
-            this.getView().setModel(oStaffModel, "staffModel")
-
-            // 2. Загружаем данные персонала
-            this._loadStaffData()
-        },
+        onInit: function () { },
 
         /**
-         * Загрузка данных из HR сервиса через дестинейшн Хоста
+         * Событие клика по кнопке "Set as Filter"
          */
-        _loadStaffData: async function () {
-            const oModel = this.getView().getModel("staffModel")
+        onSetAsFilter: function (oEvent) {
+            // Получаем контекст строки таблицы
+            const oCtx = oEvent.getSource().getBindingContext() // Это контекст OData v4
+            const sID = oCtx.getProperty("ID") // Или как называется поле ID в твоем бэкенде
+            const sName = oCtx.getProperty("name")
 
-            try {
-                const oHost = this.getCardHost()
-                if (!oHost) {
-                    throw new Error("Host not found")
-                }
+            // 1. Пишем в Storage через прокси
+            StorageUtils.setItem("selectedID", sID)
 
-                const sUrl = oHost.resolveDestination("hrService") + "/Staff"
+            // 2. Обновляем глобальную модель (она безымянная, доступна через Shell)
+            const oGlobalModel = this.getOwnerComponent().getModel()
+            oGlobalModel.setProperty("/selectedEmployeeID", sID)
 
-                const oResponse = await fetch(sUrl)
-                if (!oResponse.ok) {
-                    throw new Error(`HTTP error! status: ${oResponse.status}`)
-                }
+            // 3. Уведомляем систему через Резонантор
+            this.publish("Employee_Selected", {
+                id: sID,
+                name: sName
+            })
 
-                const oData = await oResponse.json()
-
-                // Обновляем модель данными и выключаем индикатор загрузки
-                oModel.setProperty("/items", oData.value || [])
-                oModel.setProperty("/isBusy", false)
-
-                console.log("🌳 [Yggdrasil]: Staff data successfully synchronized")
-            } catch (oErr) {
-                oModel.setProperty("/isBusy", false)
-                console.error("💥 [Portal Error]: Failed to sync staff data", oErr)
-            }
+            sap.m.MessageToast.show("Сотрудник зафиксирован: " + sName)
         }
     })
 })

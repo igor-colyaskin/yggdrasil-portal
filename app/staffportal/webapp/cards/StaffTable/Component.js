@@ -9,16 +9,12 @@ sap.ui.define([
         },
 
         init: function () {
-            // 1. Инициализация базы
             UIComponent.prototype.init.apply(this, arguments)
-
-            // Проверяем данные прямо здесь
-            const oComponentData = this.getComponentData()
-            console.log("🛠 [Component.js Карточки] Данные:", oComponentData)
-
-            if (oComponentData && oComponentData.card) {
-                console.log("✅ Объект card успешно получен в Component.js")
-            }
+            // Ищем в реестре именно главный компонент
+            const oShellComponent = sap.ui.core.Component.registry.filter(c => c.getId() === "shell")[0]
+            // Пробрасываем модели от Shell к Карточке
+            this.setModel(oShellComponent.getModel()) // Основная OData v4 (безымянная)
+            this.setModel(oShellComponent.getModel("ui"), "ui") // UI Модель (табы, фильтры)
         }
     })
 })

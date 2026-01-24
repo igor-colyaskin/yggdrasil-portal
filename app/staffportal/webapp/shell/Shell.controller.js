@@ -1,80 +1,73 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "com/epic/yggdrasil/staffportal/model/formatter",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, formatter, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/StorageUtils" // Подключаем утилиты
+], function (Controller, formatter, JSONModel, StorageUtils) {
     "use strict"
 
-    // Конфигурация карточек портала
-    const CARD_CONFIG = [
-        { id: "headerCard", containerId: "headerSection", manifest: "./cards/HeaderCard/manifest.json" },
-        { id: "navCard", containerId: "navSection", manifest: "./cards/NavCard/manifest.json" },
-        { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" }
-    ]
-
     return Controller.extend("com.epic.yggdrasil.staffportal.shell.Shell", {
-        formatter: formatter,
-
         onInit: function () {
-            // 1. Инициализация локального состояния UI
-            const oViewState = new JSONModel({
-                currentTab: "staff"
+            // 1. Инициализируем хранилище
+            StorageUtils.createStorage("YGG_PORTAL_2026")
+
+            // 2. Глобальная модель состояния (Безымянная)
+            const oUIModel = new JSONModel({
+                selectedEmployeeID: StorageUtils.readItem("selectedID") || "",
+                currentTab: "staff",
+                // Вынесли конфиг карточек сюда для чистоты Shell
+                cards: [
+                    { id: "headerCard", containerId: "headerSection", manifest: "./cards/HeaderCard/manifest.json" },
+                    { id: "navCard", containerId: "navSection", manifest: "./cards/NavCard/manifest.json" },
+                    { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" }
+                ]
             })
-            this.getView().setModel(oViewState, "viewState")
 
-            // 2. Настройка инфраструктуры через Хост
+
+            this.getOwnerComponent().setModel(oUIModel, "ui")
+
             this._setupHostCommunication()
-
-            // 3. Запуск фабрики карточек
             this._initPortalCards()
         },
 
-        /**
-         * Настройка взаимодействия с Хостом и подписки на события
-         */
         _setupHostCommunication: function () {
             const oHost = this.getOwnerComponent().getHost()
-
-            // Резолвер адресов сервисов (Destinations)
             oHost.resolveDestination = (sName) => {
-                const mDestinations = {
+                const m = {
                     "hrService": "/odata/v4/hr",
                     "financeService": "/finance",
                     "projectService": "/odata/v4/projects"
                 }
-                return mDestinations[sName]
+                return m[sName]
             }
 
-            // Подписка на навигацию через Резонантор
             oHost.subscribeEvent("Navigation_TabChanged", (oEvent) => {
                 const sTabKey = oEvent.getParameter("tabKey")
-                this.getView().getModel("viewState").setProperty("/currentTab", sTabKey)
+                this.getOwnerComponent().getModel("ui").setProperty("/currentTab", sTabKey)
             })
         },
 
-        /**
-         * Фабрика создания и размещения карточек
-         */
         _initPortalCards: function () {
             const oHost = this.getOwnerComponent().getHost()
-            const oView = this.getView()
+            const oMainModel = this.getOwnerComponent().getModel()
+            const oUiModel = this.getOwnerComponent().getModel("ui")
 
-            CARD_CONFIG.forEach(oConf => {
-                const oContainer = oView.byId(oConf.containerId)
-                if (!oContainer) {
-                    return
+            oUiModel.getProperty("/cards").forEach(oConf => {
+                const oContainer = this.getView().byId(oConf.containerId)
+                if (oContainer) {
+                    oContainer.destroyItems()
+                    // Форсируем передачу модели из Shell (Компонента) в Карточку
+                    oContainer.setModel(oMainModel)
+                    // И не забываем про модель UI (где лежит currentTab)
+                    oContainer.setModel(oUiModel, "ui")
+                    
+                    const oCard = new sap.ui.integration.widgets.Card({
+                        id: this.getView().createId(oConf.id),
+                        manifest: oConf.manifest,
+                        host: oHost
+                    })
+                    oContainer.addItem(oCard)
                 }
-
-                oContainer.destroyItems()
-
-                // Создание экземпляра интеграционной карточки
-                const oCard = new sap.ui.integration.widgets.Card({
-                    id: oView.createId(oConf.id),
-                    manifest: oConf.manifest,
-                    host: oHost
-                })
-
-                oContainer.addItem(oCard)
             })
         }
     })

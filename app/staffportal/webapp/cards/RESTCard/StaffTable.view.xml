@@ -4,14 +4,10 @@
     xmlns="sap.m">
     <Table 
         id="innerStaffTable"
-        busy="{uiModel>/isBusy}"
-        items="{path: '/Staff',
-                parameters: {count: true},
-                templateShareable: true
-        }"
+        items="{path: 'staffModel>/items', parameters: {$count: true}}"
         growing="true"
         growingThreshold="10"
-            sticky="HeaderToolbar,ColumnHeaders">
+        sticky="HeaderToolbar,ColumnHeaders">
         <columns>
             <Column width="15rem">
                 <Text text="Сотрудник" />
@@ -19,20 +15,18 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Департамент" />
             </Column>
-            <Column hAlign="Center" width="8rem">
-                <Text text="Действие" />
+            <Column hAlign="End">
+                <Text text="Уровень" />
             </Column>
         </columns>
         <items>
             <ColumnListItem>
                 <cells>
-                    <ObjectIdentifier title="{name}" text="{email}" />
-                    <Text text="{department}" />
-                    <Button 
-                        icon="sap-icon://filter" 
-                        type="Transparent" 
-                        press=".onSetAsFilter"
-                        tooltip="Установить как фильтр" />
+                    <ObjectIdentifier title="{staffModel>name}" text="{staffModel>email}" />
+                    <Text text="{staffModel>department}" />
+                    <ObjectStatus 
+                        text="{staffModel>level}" 
+                        state="{= ${staffModel>level} === 'Senior' ? 'Success' : 'None' }" />
                 </cells>
             </ColumnListItem>
         </items>

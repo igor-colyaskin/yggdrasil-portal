@@ -11,8 +11,8 @@
                     <VBox id="mainVBox" fitContainer="true" >
                         <VBox id="headerSection"/>
                         <VBox id="navSection"/>
-                        <VBox id="staffTableContainer" visible="{= ${viewState>/currentTab} === 'staff' }"/>
-                        <VBox id="financeSection" visible="{= ${viewState>/currentTab} === 'finance' }">
+                        <VBox id="staffTableContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
+                        <VBox id="financeSection" visible="{= ${ui>/currentTab} === 'finance' }">
                             <Text id="financeText" text="Finance Section"/>
                         </VBox>
                         <!-- <VBox 
