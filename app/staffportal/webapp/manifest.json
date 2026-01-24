@@ -70,7 +70,13 @@
         }
       },
       "": {
-        "dataSource": "mainService"
+        "dataSource": "mainService",
+        "type": "sap.ui.model.odata.v4.ODataModel",
+        "settings": {
+          "autoExpandSelect": true,
+          "operationMode": "Server",
+          "groupId": "$auto"
+        }
       }
     },
     "routing": {

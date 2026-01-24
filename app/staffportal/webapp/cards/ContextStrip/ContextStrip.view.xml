@@ -1,0 +1,13 @@
+<mvc:View controllerName="com.epic.yggdrasil.staffportal.cards.ContextStrip.ContextStrip"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiSmallMargin">
+        <HBox alignItems="Center">
+            <Avatar id="avatar" src="sap-icon://person-placeholder" displaySize="L" class="sapUiSmallMarginEnd" />
+            <VBox>
+                <Title text="{name}" level="H2" />
+                <Text text="ID: {ID} | Level: {level}" />
+            </VBox>
+        </HBox>
+        <Button icon="sap-icon://decline" text="Сбросить фильтр" press=".onResetFilter" type="Transparent" />
+    </HBox>
+</mvc:View>

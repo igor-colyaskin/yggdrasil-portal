@@ -37,7 +37,8 @@ sap.ui.define([
                 cards: [
                     { id: "headerCard", containerId: "headerSection", manifest: "./cards/HeaderCard/manifest.json" },
                     { id: "navCard", containerId: "navSection", manifest: "./cards/NavCard/manifest.json" },
-                    { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" }
+                    { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" },
+                    { id: "contextStripCard", containerId: "contextStripContainer", manifest: "./cards/ContextStrip/manifest.json" }
                 ]
             };
 
@@ -63,6 +64,7 @@ sap.ui.define([
                 if (mCtx) {
                     // Обновляем модель (это автоматически обновит биндинги во всех карточках)
                     Object.keys(mCtx).forEach(sKey => {
+                        console.log(`📡 [Component]: Updating model key "${sKey}" with value:`, mCtx[sKey]); // <-- ПРОВЕРКА 2
                         oUiModel.setProperty("/" + sKey, mCtx[sKey]);
                     });
                     

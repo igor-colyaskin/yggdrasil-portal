@@ -11,7 +11,7 @@
         }"
         growing="true"
         growingThreshold="10"
-            sticky="HeaderToolbar,ColumnHeaders">
+        sticky="HeaderToolbar,ColumnHeaders">
         <columns>
             <Column width="15rem">
                 <Text text="Сотрудник" />
