@@ -1,19 +1,25 @@
 {
-    "hostCards": [
-        {
-            "id": "header_card",
-            "fragment": "HeaderCard",
-            "target": "header"
+    "userRole": "Wizard",
+    "cards": [
+        { 
+            "id": "headerCard", 
+            "containerId": "headerSection", 
+            "manifest": "./cards/HeaderCard/manifest.json" 
         },
-        {
-            "id": "tabs_card",
-            "fragment": "NavigationTabs",
-            "target": "navigation"
+        { 
+            "id": "navCard", 
+            "containerId": "navSection", 
+            "manifest": "./cards/NavCard/manifest.json" 
         },
-        {
-            "id": "staff_table_card",
-            "fragment": "StaffTable",
-            "target": "content"
+        { 
+            "id": "staffTableCard", 
+            "containerId": "staffTableContainer", 
+            "manifest": "./cards/StaffTable/manifest.json" 
+        },
+        { 
+            "id": "contextStripCard", 
+            "containerId": "contextStripContainer", 
+            "manifest": "./cards/ContextStrip/manifest.json" 
         }
     ]
 }
