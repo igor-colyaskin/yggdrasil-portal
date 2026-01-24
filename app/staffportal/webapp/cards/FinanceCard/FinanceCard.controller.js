@@ -1,70 +1,68 @@
 sap.ui.define([
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller", "sap/m/MessageToast"// Твоя библиотека
-], function (BaseController, MessageToast) {
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
+], function (BaseController, Filter, FilterOperator) {
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.FinanceCard.FinanceCard", {
+
         onInit: function () {
-            setTimeout(function () {
-                const oCard = this.getOwnerComponent().getComponentData().__sapUiIntegration_card
-                if (oCard && oCard.getHostInstance().publishEvent) {
-                    console.log("🚀 Публикуем событие StaffPortal_Ready из HeaderCard")
-                    oCard.getHostInstance().publishEvent("StaffPortal_Ready", {
-                        source: "HeaderCard",
-                        status: "Magic is happening"
-                    })
-                }
-            }.bind(this), 500)
-        },
+            // Подписка на событие выбора сотрудника через наш "Эфирный Резонантор"
+            this.subscribe("Employee_Selected", this._onEmployeeChanged)
 
-        onAfterRendering: function () {
-            const oComponentData = this.getOwnerComponent().getComponentData()
-
-            // Достаем объект через системный ключ
-            const oCard = oComponentData.__sapUiIntegration_card
-
-            if (oCard) {
-                console.log("✅ Карточка в руках! ID:", oCard.getId())
-
-                // Получаем наш Хост (тот самый, где живет Эфирный Резонантор)
-                const oHost = oCard.getHostInstance()
-                console.log("🧙‍♂️ Хост доступен:", oHost.getId())
-                console.log("🧙‍♂️ Весь объект Хоста:", oHost)
-                console.log("🔍 Есть ли метод publishEvent?:", !!oHost.publishEvent)
-
-                // Теперь проверим наш Резонантор
-                if (oHost.publishEvent) {
-                    console.log("📡 Эфирный Резонантор готов к трансляции!")
-                }
-            } else {
-                console.error("❌ Объект __sapUiIntegration_card не найден")
+            // Первичная загрузка, если ID уже был выбран до инициализации карточки
+            const sInitialID = this.getUIProperty("/selectedEmployeeID")
+            if (sInitialID) {
+                this._refreshFinanceData(sInitialID)
             }
         },
 
-        onSendSignal: function () {
-            // 1. Достаем объект карточки из системных данных компонента
-            const oCard = this.getOwnerComponent().getComponentData().__sapUiIntegration_card
+        /**
+         * Обработчик события смены сотрудника
+         */
+        _onEmployeeChanged: function (oEvent) {
+            const sID = oEvent.getParameter("id")
+            this._refreshFinanceData(sID)
+        },
 
-            if (oCard) {
-                // 2. Получаем наш модифицированный Хост
-                const oHost = oCard.getHostInstance()
-
-                // 3. Проверяем наличие нашего магического метода
-                if (oHost && typeof oHost.publishEvent === "function") {
-
-                    // ОТПРАВЛЯЕМ СИГНАЛ!
-                    oHost.publishEvent("EtherPulse", {
-                        user: "Архитектор Саги",
-                        message: "Система стабильна, Резонантор активен!"
-                    })
-
-                    MessageToast.show("Сигнал ушел в Эфир! Проверь консоль.")
-                } else {
-                    console.error("❌ Хост найден, но метод publishEvent отсутствует. Проверь Component.js Шелла.")
-                }
-            } else {
-                console.error("❌ Не удалось найти объект карточки (__sapUiIntegration_card)")
+        /**
+         * Загрузка финансовых данных через OData v2
+         */
+        _refreshFinanceData: function (sEmployeeID) {
+            if (!sEmployeeID) {
+                this.getView().unbindElement("fin")
+                return
             }
+
+            const oModel = this.getModel("fin")
+            const oView = this.getView()
+
+            // Используем прямой read, так как v2 не поддерживает фильтры в bindElement напрямую.
+            // Оборачиваем ID в одинарные кавычки для корректного парсинга GUID в CAP v2 Adapter.
+            oModel.read("/Payrolls", {
+                urlParameters: {
+                    "$expand": "equipment",
+                    "$filter": "employeeId eq '" + sEmployeeID + "'"
+                },
+                success: (oData) => {
+                    if (oData?.results?.length > 0) {
+                        const oEntry = oData.results[0]
+                        // Формируем каноничный путь v2: /Entity(guid'...')
+                        const sKey = oModel.createKey("/Payrolls", oEntry)
+
+                        oView.bindElement({
+                            path: "fin>" + (sKey.startsWith("/") ? sKey : "/" + sKey)
+                        })
+                    } else {
+                        oView.unbindElement("fin")
+                    }
+                },
+                error: (oError) => {
+                    console.error("💰 [Finance]: Error loading payroll data", oError)
+                    oView.unbindElement("fin")
+                }
+            })
         }
     })
 })

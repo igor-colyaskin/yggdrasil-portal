@@ -19,6 +19,7 @@
                                 description="Вернитесь на вкладку Персонал и выберите сотрудника для анализа" 
                                 illustrationType="sapIllu-SearchEarth" />
                         </VBox>
+                        <VBox id="financeSection" visible="{= ${ui>/currentTab} === 'finance' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
                     </VBox>
                 </content>
             </Page>

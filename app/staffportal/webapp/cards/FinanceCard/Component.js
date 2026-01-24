@@ -12,12 +12,11 @@ sap.ui.define([
             // 1. Инициализация базы
             UIComponent.prototype.init.apply(this, arguments)
 
-            // Проверяем данные прямо здесь
-            const oComponentData = this.getComponentData()
-            console.log("🛠 [Component.js Карточки] Данные:", oComponentData)
-
-            if (oComponentData && oComponentData.card) {
-                console.log("✅ Объект card успешно получен в Component.js")
+            // В cards/FinanceCard/Component.js
+            const oShell = sap.ui.core.Component.registry.filter(c => c.getId() === "shell")[0]
+            if (oShell) {
+                this.setModel(oShell.getModel("fin"), "fin")
+                this.setModel(oShell.getModel("ui"), "ui")
             }
         }
     })

@@ -30,10 +30,17 @@
         }
       },
       "financeService": {
-        "uri": "/odata/v2/finance",
+        "uri": "/odata/v2/finance/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0"
+        }
+      },
+      "projectService": {
+        "uri": "/odata/v4/projects/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
         }
       }
     }
@@ -77,6 +84,14 @@
           "operationMode": "Server",
           "groupId": "$auto"
         }
+      },
+      "fin": {
+        "dataSource": "financeService",
+        "type": "sap.ui.model.odata.v2.ODataModel"
+      },
+      "proj": {
+        "dataSource": "projectService",
+        "type": "sap.ui.model.odata.v4.ODataModel"
       }
     },
     "routing": {

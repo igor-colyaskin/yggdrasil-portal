@@ -11,21 +11,6 @@ sap.ui.define([
             // 1. Инициализируем хранилище
             StorageUtils.createStorage("YGG_PORTAL_2026")
 
-            // 2. Глобальная модель состояния (Безымянная)
-            const oUIModel = new JSONModel({
-                selectedEmployeeID: StorageUtils.readItem("selectedID") || "",
-                currentTab: "staff",
-                // Вынесли конфиг карточек сюда для чистоты Shell
-                cards: [
-                    { id: "headerCard", containerId: "headerSection", manifest: "./cards/HeaderCard/manifest.json" },
-                    { id: "navCard", containerId: "navSection", manifest: "./cards/NavCard/manifest.json" },
-                    { id: "staffTableCard", containerId: "staffTableContainer", manifest: "./cards/StaffTable/manifest.json" },
-                    { id: "contextStripCard", containerId: "contextStripContainer", manifest: "./cards/ContextStrip/manifest.json" }
-                ]
-            })
-
-            this.getOwnerComponent().setModel(oUIModel, "ui")
-
             this._setupHostCommunication()
             this._initPortalCards()
         },

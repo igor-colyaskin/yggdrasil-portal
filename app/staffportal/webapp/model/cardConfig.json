@@ -20,6 +20,11 @@
             "id": "contextStripCard", 
             "containerId": "contextStripContainer", 
             "manifest": "./cards/ContextStrip/manifest.json" 
+        },
+        { 
+            "id": "financeCard", 
+            "containerId": "financeSection", 
+            "manifest": "./cards/FinanceCard/manifest.json" 
         }
     ]
 }
