@@ -4,7 +4,9 @@ sap.ui.define([
     "use strict"
 
     return Controller.extend("com.epic.yggdrasil.staffportal.lib.sdkcard.Base.controller", {
-
+        getModel: function (sName) {
+            return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName)
+        },
         /**
          * Быстрый доступ к инстансу интеграционной карточки
          */

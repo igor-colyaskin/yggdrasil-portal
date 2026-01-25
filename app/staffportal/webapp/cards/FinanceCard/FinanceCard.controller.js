@@ -36,7 +36,7 @@ sap.ui.define([
             }
 
             const oView = this.getView()
-            const oModel = oView.getModel("fin")
+            const oModel = this.getModel("fin")
 
             // Используем прямой read, так как v2 не поддерживает фильтры в bindElement напрямую.
             // Оборачиваем ID в одинарные кавычки для корректного парсинга GUID в CAP v2 Adapter.

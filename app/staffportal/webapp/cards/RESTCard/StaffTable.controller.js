@@ -22,7 +22,7 @@ sap.ui.define([
          * Загрузка данных из HR сервиса через дестинейшн Хоста
          */
         _loadStaffData: async function () {
-            const oModel = this.getView().getModel("staffModel")
+            const oModel = this.getModel("staffModel")
 
             try {
                 const oHost = this.getCardHost()
