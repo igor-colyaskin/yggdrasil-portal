@@ -14,10 +14,10 @@ sap.ui.define([
 
             // Проверяем данные прямо здесь
             const oComponentData = this.getComponentData()
-            console.log("🛠 [Component.js Карточки] Данные:", oComponentData)
+            // console.log("🛠 [Component.js Карточки] Данные:", oComponentData)
 
             if (oComponentData && oComponentData.card) {
-                console.log("✅ Объект card успешно получен в Component.js")
+                // console.log("✅ Объект card успешно получен в Component.js")
             }
         }
     })

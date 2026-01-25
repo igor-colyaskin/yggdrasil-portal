@@ -28,7 +28,7 @@ sap.ui.define([
          * @param {string} sPath Путь к свойству (например, "/selectedEmployeeID")
          */
         getUIProperty: function (sPath) {
-            return this.getOwnerComponent().getModel("ui").getProperty(sPath)
+            return this.getOwnerComponent().getModel("ui").getProperty(`/${sPath}`)
         },
 
         /**
@@ -64,6 +64,26 @@ sap.ui.define([
                 // 'this' передается третьим аргументом для сохранения контекста контроллера
                 oHost.subscribeEvent(sEventName, fnHandler, this)
             }
+        },
+
+        onToggleFilter: function (sID) {
+            const sCurrentSelected = this.getUIProperty("selectedEmployeeID")
+
+            if (sCurrentSelected === sID) {
+                // Повторный клик — вызываем сброс
+                this.onResetFilter()
+            } else {
+                // Новый выбор
+                this.setUIProperty("selectedEmployeeID", sID)
+                this.publish("Employee_Selected", { id: sID })
+            }
+        },
+
+        onResetFilter: function () {
+            this.setUIProperty("selectedEmployeeID", "")
+            this.setUIProperty("currentTab", "staff")
+            this.publish("Employee_Selected", { id: "" })
+            console.log("🌲 [Yggdrasil SDK]: Глобальный сброс контекста")
         }
     })
 })

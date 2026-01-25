@@ -11,7 +11,7 @@ sap.ui.define([
             // 2. Проверяем, может ID уже есть (при перезагрузке)
             const sInitialID = this.getUIProperty("/selectedEmployeeID")
             if (sInitialID) {
-                this._bindEmployee(sInitialID)
+                this._bindEmployee(sInitialID.selectedEmployeeID)
             }
         },
 

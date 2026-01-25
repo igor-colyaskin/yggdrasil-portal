@@ -58,7 +58,7 @@ sap.ui.define([
                 if (mCtx) {
                     // Обновляем модель (это автоматически обновит биндинги во всех карточках)
                     Object.keys(mCtx).forEach(sKey => {
-                        console.log(`📡 [Component]: Updating model key "${sKey}" with value:`, mCtx[sKey]) // <-- ПРОВЕРКА 2
+                        // console.log(`📡 [Component]: Updating model key "${sKey}" with value:`, mCtx[sKey]) // <-- ПРОВЕРКА 2
                         oUiModel.setProperty("/" + sKey, mCtx[sKey])
                     })
 
@@ -69,14 +69,14 @@ sap.ui.define([
 
                     // Уведомляем карточки об изменении конфигурации
                     this._oHost.fireEvent("configurationChange")
-                    console.log("🌐 [Host Context]: Updated & Persisted", oUiModel.getData())
+                    // console.log("🌐 [Host Context]: Updated & Persisted", oUiModel.getData())
                 }
             }
 
             // --- 2. Эфирный Резонантор (PubSub) ---
             this._oHost.publishEvent = (sName, oData) => {
                 this._oResonator.fireEvent(sName, oData)
-                console.log(`📡 [Resonator]: Published -> ${sName}`, oData)
+                // console.log(`📡 [Resonator]: Published -> ${sName}`, oData)
             }
 
             this._oHost.subscribeEvent = (sName, fnCallback, oListener) => {

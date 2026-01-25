@@ -15,21 +15,20 @@
         sticky="HeaderToolbar,ColumnHeaders">
         <columns>
             <Column width="15rem">
-                <Text text="Сотрудник" />
+                <Text text="Set as Filter" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Департамент" />
+                <Text text="Employee" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="email" />
             </Column>
             <Column hAlign="Center" width="8rem">
-                <Text text="Действие" />
+                <Text text="Department" />
             </Column>
         </columns>
         <items>
-            <ColumnListItem 
-            highlight="{= ${ID} === ${ui>/selectedEmployeeID} ? 'Information' : 'None' }">
+            <ColumnListItem>
                 <cells>
                     <Button 
                     icon="{= ${ID} === ${ui>/selectedEmployeeID} ? 'sap-icon://accept' : 'sap-icon://filter' }"

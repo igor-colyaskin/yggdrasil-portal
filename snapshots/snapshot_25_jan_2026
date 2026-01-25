@@ -1,0 +1,41 @@
+Snapshot: Yggdrasil Portal (2026-01-25)
+1. Архитектурный статус
+Концепция: Shell-Host-Card (Микрофронтенды на UI5 Integration Cards).
+
+Центральный узел: epicHost (Host), управляющий состоянием через uiModel и кастомный PubSub Эфирный Резонантор (EtherResonator).
+
+SDK: lib/sdkcard/Base.controller.js — содержит базовую логику onResetFilter, onToggleFilter, геттеры/сеттеры свойств.
+
+2. Слой данных (Backend/CAP)
+Типизация ключей: Отказ от cuid в пользу String(36) для гибкости связей (ручные ID типа emp-03, p-03).
+
+Сервисы:
+
+HRService (OData v4): /odata/v4/hr. Сущности Staff (Employees) + справочник Departments.
+
+FinanceService (OData v2): /finance. Сущности Payrolls + композиция TechnicalAssets.
+
+ProjectService (REST/v4): /odata/v4/projects. Ожидает реализации.
+
+Связи в CSV: Employees.ID -> Payrolls.employeeId; Payrolls.ID -> TechnicalAssets.owner_ID.
+
+3. UI/UX Состояние
+Глобальный фильтр: Реализован через selectedEmployeeID в uiModel.
+
+StaffTable: Использует Expression Binding для динамической смены иконок (sap-icon://filter ↔ sap-icon://accept) и семантической подсветки (highlight).
+
+FinanceCard: Работает через $expand=equipment. Данные синхронизированы для 22 сотрудников.
+
+ContextStrip: Показывает досье выбранного сотрудника, умеет сбрасывать фильтр.
+
+4. Roadmap (Следующие шаги)
+Разделение Context Zone: Создание изолированных StaffFilterCard и ProjectFilterCard.
+
+Project Overview: Реализация таск-менеджмента в ProjectService.
+
+Visibility Logic: Настройка CardManager для переключения карточек фильтров в зависимости от активной табы.
+
+Visual Polish: Форматтеры валют и IllustratedMessage для пустых состояний.
+
+Твоя "шпаргалка" для возобновления:
+"Мы работаем над Yggdrasil Portal. Бэкенд на CAP, фронт на Integration Cards. Ключи строковые, ID синхронизированы между HR и Finance. В BaseController вынесен метод onToggleFilter. Остановились на идее разделения фильтров для Staff и Projects."

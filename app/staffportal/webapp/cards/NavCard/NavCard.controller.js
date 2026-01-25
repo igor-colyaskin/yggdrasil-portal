@@ -1,7 +1,6 @@
 sap.ui.define([
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
-    "sap/m/MessageToast"
-], function (BaseController, MessageToast) {
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller"
+], function (BaseController) {
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.NavCard.NavCard", {
@@ -28,9 +27,6 @@ sap.ui.define([
             const oItem = oEvent.getParameter("item")
             const sKey = oItem.getKey()
             const sText = oItem.getText()
-
-            // 1. Приветствие
-            MessageToast.show("Переход в раздел: " + sText)
 
             // 2. Обновляем состояние через SDK
             // Это автоматически обновит модель "ui" в Shell и прогонит данные через Host Context
