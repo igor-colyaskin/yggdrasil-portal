@@ -5,7 +5,22 @@ sap.ui.define([
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.NavCard.NavCard", {
+        onInit: function () {
+            // Подписываемся на глобальное событие сброса или смены состояния
+            this.subscribe("Employee_Selected", this._onEmployeeChanged)
+        },
 
+        _onEmployeeChanged: function (oEvent) {
+            const sID = oEvent.getParameter("id")
+
+            // Если ID пустой (сброс), мы принудительно убеждаемся, что модель карточки
+            // соответствует модели Шелла. 
+            if (!sID) {
+                // Если проброс моделей настроен верно, это сработает автоматически через биндинг.
+                // Но для надежности можем явно "подтолкнуть" TabBar:
+                this.setUIProperty("currentTab", "staff")
+            }
+        },
         /**
          * Обработка выбора вкладки
          */

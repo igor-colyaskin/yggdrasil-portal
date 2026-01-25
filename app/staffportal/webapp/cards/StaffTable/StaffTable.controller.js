@@ -6,7 +6,25 @@ sap.ui.define([
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable", {
 
-        onInit: function () { },
+        onInit: function () {
+            this.subscribe("Employee_Selected", this._onEmployeeChanged)
+        },
+
+        _onEmployeeChanged: function (oEvent) {
+            const sID = oEvent.getParameter("id")
+            const oView = this.getView()
+
+            if (sID) {
+                // Биндимся только если есть валидный UUID
+                oView.bindElement({
+                    path: "/Staff(" + sID + ")",
+                    parameters: { $select: "ID,level,name" }
+                })
+            } else {
+                // Если ID сброшен — просто отвязываем данные
+                oView.unbindElement()
+            }
+        },
 
         /**
          * Событие клика по кнопке "Set as Filter"

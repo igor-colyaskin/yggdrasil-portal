@@ -22,12 +22,28 @@ sap.ui.define([
 
         _bindEmployee: function (sID) {
             const oView = this.getView()
-            // Выполняем Element Binding к основной OData v4 модели
+
+            // 1. Если ID пустой (сброс фильтра)
+            if (!sID || sID === "") {
+                console.log("🌲 [ContextStrip]: Сброс контекста, отвязка данных")
+                oView.unbindElement() // Снимаем привязку, чтобы очистить поля в UI
+                return
+            }
+
+            // 2. Если ID валидный, выполняем биндинг
             oView.bindElement({
-                path: "/Staff('" + sID + "')",
+                path: "/Staff('" + sID + "')", // В v4 для UUID можно без лишних кавычек, если ID уже строка-UUID
                 events: {
+                    dataRequested: function () {
+                        oView.setBusy(true)
+                    },
                     dataReceived: function (oData) {
-                        console.log("🌲 [ContextStrip]: Данные получены для ID", sID)
+                        oView.setBusy(false)
+                        if (oData.getParameter("error")) {
+                            console.error("🌲 [ContextStrip]: Ошибка загрузки данных для ID", sID)
+                        } else {
+                            console.log("🌲 [ContextStrip]: Данные успешно привязаны")
+                        }
                     }
                 }
             })
