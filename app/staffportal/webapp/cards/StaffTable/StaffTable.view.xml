@@ -11,6 +11,7 @@
         }"
         growing="true"
         growingThreshold="10"
+        mode="SingleSelectMaster"
         sticky="HeaderToolbar,ColumnHeaders">
         <columns>
             <Column width="15rem">
@@ -27,17 +28,16 @@
             </Column>
         </columns>
         <items>
-            <ColumnListItem>
+            <ColumnListItem 
+            highlight="{= ${ID} === ${ui>/selectedEmployeeID} ? 'Information' : 'None' }">
                 <cells>
-                    <!-- <ObjectIdentifier title="{name}" text="{email}" /> -->
-                    <Text text="{name}" />
-                    <Text text="{dept/name}" />
-                    <Text text="{email}" />
                     <Button 
-                        icon="sap-icon://filter" 
-                        type="Transparent" 
-                        press=".onSetAsFilter"
-                        tooltip="Установить как фильтр" />
+                    icon="{= ${ID} === ${ui>/selectedEmployeeID} ? 'sap-icon://accept' : 'sap-icon://filter' }"
+                    type="{= ${ID} === ${ui>/selectedEmployeeID} ? 'Emphasized' : 'Transparent' }"
+                    press=".onSetAsFilter" />
+                    <Text text="{name}" />
+                    <Text text="{email}" />
+                    <Text text="{dept/name}" />
                 </cells>
             </ColumnListItem>
         </items>
