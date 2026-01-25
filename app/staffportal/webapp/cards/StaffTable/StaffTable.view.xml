@@ -19,6 +19,9 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Департамент" />
             </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="email" />
+            </Column>
             <Column hAlign="Center" width="8rem">
                 <Text text="Действие" />
             </Column>
@@ -26,8 +29,10 @@
         <items>
             <ColumnListItem>
                 <cells>
-                    <ObjectIdentifier title="{name}" text="{email}" />
-                    <Text text="{department}" />
+                    <!-- <ObjectIdentifier title="{name}" text="{email}" /> -->
+                    <Text text="{name}" />
+                    <Text text="{dept/name}" />
+                    <Text text="{email}" />
                     <Button 
                         icon="sap-icon://filter" 
                         type="Transparent" 

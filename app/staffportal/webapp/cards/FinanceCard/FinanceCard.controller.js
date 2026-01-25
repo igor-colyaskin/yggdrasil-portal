@@ -52,7 +52,10 @@ sap.ui.define([
                         const sKey = oModel.createKey("/Payrolls", oEntry)
 
                         oView.bindElement({
-                            path: "fin>" + (sKey.startsWith("/") ? sKey : "/" + sKey)
+                            path: "fin>" + (sKey.startsWith("/") ? sKey : "/" + sKey),
+                            parameters: {
+                                expand: "equipment" // Повторяем здесь для надежности биндинга
+                            }
                         })
                     } else {
                         oView.unbindElement("fin")

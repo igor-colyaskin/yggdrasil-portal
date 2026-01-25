@@ -1,3 +1,23 @@
-ID;name;department;position;email;level
-e1b2c3d4-a1b2-c3d4-d5e6-f7g8h9i0j1k2;Игорь Коляскин;IT;Senior Architect;igor@epic.com;Senior
-b5c6d7e8-b2c3-d4e5-f6g7-h8i9j0k1l2m3;Маг Альхимик;Research;Lead Scientist;alchem@epic.com;Lead
+ID;name;dept_ID;position;email;level
+e1b2c3d4-a1b2-c3d4-d5e6-f7g8h9i0j1k2;Игорь Коляскин;dept-it;Senior Architect;igor@epic.com;Senior
+b5c6d7e8-b2c3-d4e5-f6g7-h8i9j0k1l2m3;Маг Альхимик;dept-res;Lead Scientist;alchem@epic.com;Lead
+emp-03;Ethan Hunt;dept-it;Security Lead;ethan@imf.com;Lead
+emp-04;Luther Stickell;dept-it;Senior Hacker;luther@imf.com;Senior
+emp-05;Benji Dunn;dept-it;Field Tech;benji@imf.com;Middle
+emp-06;Willy Wonka;dept-prod;CEO & Founder;willy@wonka.com;Legend
+emp-07;Charlie Bucket;dept-prod;Chief Chocolatier;charlie@wonka.com;Junior
+emp-08;Augustus Gloop;dept-prod;Quality Control;gloop@wonka.com;Middle
+emp-09;Veruca Salt;dept-prod;Acquisition Manager;veruca@wonka.com;Middle
+emp-10;Mike Teavee;dept-prod;Media Specialist;mike@wonka.com;Junior
+emp-11;Gandalf the Grey;dept-res;Staff Wizard;gandalf@res.com;Legend
+emp-12;Galadriel;dept-res;Light Architect;galadriel@res.com;Lead
+emp-13;Legolas;dept-res;Precision Research;legolas@res.com;Senior
+emp-14;Gimli;dept-res;Infrastructure Lead;gimli@res.com;Senior
+emp-15;Tony Stark;dept-it;Hardware Architect;tony@stark.com;Lead
+emp-16;Peter Parker;dept-it;Junior Web-Dev;peter@stark.com;Junior
+emp-17;Oompa Loompa 01;dept-prod;Process Engineer;oompa1@wonka.com;Middle
+emp-18;Oompa Loompa 02;dept-prod;Process Engineer;oompa2@wonka.com;Middle
+emp-19;Oompa Loompa 03;dept-prod;Process Engineer;oompa3@wonka.com;Middle
+emp-20;Saruman White;dept-res;Legacy Tech Lead;saruman@res.com;Lead
+emp-21;Bilbo Baggins;dept-res;Archivist;bilbo@res.com;Middle
+emp-22;Frodo Baggins;dept-res;Security Tester;frodo@res.com;Junior

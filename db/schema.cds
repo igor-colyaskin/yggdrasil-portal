@@ -6,28 +6,38 @@ using {
 } from '@sap/cds/common';
 
 // --- СИСТЕМА 1: HR Portal (Основные данные) ---
-entity Employees : cuid, managed {
-    name       : String(100);
-    department : String(50); // IT, Finance, HR
-    position   : String(50); // Senior Developer, HR Manager
-    email      : String(100);
-    level      : String(10); // Junior, Middle, Senior
+entity Employees : managed {
+    key ID       : String(36);
+        name     : String(100);
+        dept     : Association to Departments;
+        position : String(50); // Senior Developer, HR Manager
+        email    : String(100);
+        level    : String(10); // Junior, Middle, Senior
+}
+
+// Сущность отделов
+entity Departments {
+    key ID          : String(36);
+        name        : String(50);
+        description : String(100);
 }
 
 // --- СИСТЕМА 2: Finance & Assets (Бухгалтерия и Техника) ---
-entity Payrolls : cuid {
-    employeeId : UUID; // Ссылка на Employees.id
-    salary     : Decimal(15, 2);
-    currency   : String(3) default 'RUB';
-    equipment  : Composition of many TechnicalAssets
-                     on equipment.owner = $self;
+entity Payrolls {
+    key ID         : String(36);
+        employeeId : String(36); // Ссылка на Employees.id
+        salary     : Decimal(15, 2);
+        currency   : String(3) default 'RUB';
+        equipment  : Composition of many TechnicalAssets
+                         on equipment.owner = $self;
 }
 
-entity TechnicalAssets : cuid {
-    owner     : Association to Payrolls;
-    type      : String(20); // Laptop, Monitor, Phone
-    model     : String(50);
-    serialNum : String(30);
+entity TechnicalAssets {
+    key ID        : String(36);
+        owner     : Association to Payrolls;
+        type      : String(20); // Laptop, Monitor, Phone
+        model     : String(50);
+        serialNum : String(30);
 }
 
 // --- СИСТЕМА 3: Project Office (Загрузка в проектах) ---

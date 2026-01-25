@@ -1,0 +1,17 @@
+ID;owner_ID;type;model;serialNum
+asset-mage-01;p2b3c4d5;Tool;Alchemist Still;SN-MAGE-001
+asset-mage-02;p2b3c4d5;Jewelry;Philosopher Stone;SN-MAGE-999
+asset-01;p1a2b3c4;Laptop;MacBook Pro M3;SN-YGG-001
+asset-02;p1a2b3c4;Monitor;Dell UltraSharp 32;SN-YGG-002
+asset-03;p-03;Smartphone;Satellite Phone Sat-X;SN-IMF-777
+asset-04;p-03;Gadget;Explosive Chewing Gum;SN-IMF-GUM
+asset-05;p-04;Laptop;Panasonic Toughbook;SN-IMF-SEC
+asset-06;p-06;Vehicle;Great Glass Elevator;SN-WONKA-01
+asset-07;p-06;Gadget;Golden Ticket Generator;SN-WONKA-GT
+asset-08;p-07;Tool;Chocolate Thermometer;SN-WONKA-JR
+asset-11;p-11;Staff;Glamdring Light-Source;SN-MAGE-01
+asset-12;p-12;Jewelry;Nenya Ring;SN-LOTR-02
+asset-15;p-15;Armor;Mark LXXXV Iron Suit;SN-STARK-85
+asset-16;p-15;AI;J.A.R.V.I.S. Server;SN-STARK-AI
+asset-17;p-22;Jewelry;The One Ring;SN-LOTR-01
+asset-18;p-22;Weapon;Sting Sword (Blue Light);SN-LOTR-SW

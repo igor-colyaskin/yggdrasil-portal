@@ -3,6 +3,7 @@ using {com.epic.yggdrasil as db} from '../db/schema';
 // HR Сервис (OData v4) - Наш "Overview"
 service HRService @(path: '/odata/v4/hr') {
     entity Staff as projection on db.Employees;
+    entity Departments as projection on db.Departments; // Даем доступ к справочнику
 }
 
 // Финансовый сервис (Будем имитировать OData v2)
