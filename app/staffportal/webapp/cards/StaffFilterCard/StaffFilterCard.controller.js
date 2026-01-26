@@ -74,11 +74,21 @@ sap.ui.define([
         },
 
         onConfirmSettings: function (oEvent) {
-            // Поскольку у нас Two-Way Binding в фрагменте (selected="{ui>...}"),
-            // значения в модели УЖЕ обновились сами!
-            // Нам остается только сохранить их в Storage
+            const oSettings = this.getUIProperty("settings/staffTable/columns")
+
+            // Если отдел скрыли, сбрасываем его значение в селекте
+            if (!oSettings.dept) {
+                this.byId("deptFilter").setSelectedKey("")
+            }
+            // Если имя скрыли, очищаем поиск
+            if (!oSettings.name) {
+                this.byId("nameFilter").setValue("")
+            }
+
+            // Триггерим "Go", чтобы таблица обновилась без учета скрытых полей
+            this.onGo()
+
             this.setUIProperty("settings", this.getUIProperty("settings"))
-            sap.m.MessageToast.show("Настройки применены")
         }
     })
 })
