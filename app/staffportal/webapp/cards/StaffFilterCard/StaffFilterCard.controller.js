@@ -1,5 +1,5 @@
 sap.ui.define([
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base/controller",
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator"
 ], function (BaseController, Filter, FilterOperator) {
@@ -8,24 +8,46 @@ sap.ui.define([
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.StaffFilterCard.StaffFilterCard", {
 
         onInit: function () {
-            // Если нужно что-то настроить при старте
+            const oSelect = this.byId("deptFilter")
+
+            // Ручной биндинг с перехватом обновления
+            oSelect.bindAggregation("items", {
+                path: "/Departments",
+                template: new sap.ui.core.Item({
+                    key: "{ID}",
+                    text: "{name}"
+                }),
+                events: {
+                    // Этот обработчик вызывается КАЖДЫЙ РАЗ, когда данные приходят с сервера
+                    dataReceived: function () {
+                        // Добавляем "Все отделы", если его еще нет
+                        const aItems = oSelect.getItems()
+                        const bHasAll = aItems.some(item => item.getKey() === "ALL")
+
+                        if (!bHasAll) {
+                            oSelect.insertItem(new sap.ui.core.Item({
+                                key: "ALL",
+                                text: "Все отделы"
+                            }), 0)
+                            oSelect.setSelectedKey("ALL")
+                        }
+                    }
+                }
+            })
         },
 
         /**
          * Магическая кнопка GO
          */
         onGo: function () {
-            const sQuery = this.byId("nameFilter").getValue()
             const sDept = this.byId("deptFilter").getSelectedKey()
-
-            // Формируем объект фильтров для публикации
-            const oFilterData = {
-                name: sQuery,
-                dept: sDept
+            const oFilters = {
+                name: this.byId("nameFilter").getValue(),
+                // Если выбрано "ALL" или ничего не выбрано - отправляем пустую строку или null
+                dept: (sDept === "ALL" || !sDept) ? "" : sDept
             }
 
-            console.log("🌲 [StaffFilter]: Применяем фильтры", oFilterData)
-            this.publish("Apply_Staff_Filter", oFilterData)
+            this.publish("Apply_Staff_Filter", oFilters)
         },
 
         /**

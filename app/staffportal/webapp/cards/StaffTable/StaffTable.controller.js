@@ -1,6 +1,8 @@
 sap.ui.define([
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller"
-], function (BaseController) {
+    "com/epic/yggdrasil/staffportal/lib/sdkcard/Base.controller",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
+], function (BaseController, Filter, FilterOperator) {
     "use strict"
 
     return BaseController.extend("com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable", {
@@ -14,21 +16,22 @@ sap.ui.define([
             const oTable = this.byId("innerStaffTable") // ID твоей таблицы в XML
             const oBinding = oTable.getBinding("items")
             const aFilters = []
+            const { name, dept } = oData.getParameters()
 
             // 1. Фильтр по имени или email (через OR)
-            if (oData.name) {
+            if (name) {
                 aFilters.push(new Filter({
                     filters: [
-                        new Filter("name", FilterOperator.Contains, oData.name),
-                        new Filter("email", FilterOperator.Contains, oData.name)
+                        new Filter("name", FilterOperator.Contains, name),
+                        new Filter("email", FilterOperator.Contains, name)
                     ],
                     and: false
                 }))
             }
 
             // 2. Фильтр по департаменту
-            if (oData.dept && oData.dept !== "All") { // Допустим, "All" - это сброс
-                aFilters.push(new Filter("dept_ID", FilterOperator.EQ, oData.dept))
+            if (dept && dept !== "All") { // Допустим, "All" - это сброс
+                aFilters.push(new Filter("dept_ID", FilterOperator.EQ, dept))
             }
 
             // Применяем массив фильтров (через AND по умолчанию)
