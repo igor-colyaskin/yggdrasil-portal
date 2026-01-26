@@ -1,0 +1,1 @@
+2026-01-26: when I start and a user is selected, and I click tab 'Finance', there is no salary and assets
