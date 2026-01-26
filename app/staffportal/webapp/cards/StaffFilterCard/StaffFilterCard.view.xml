@@ -1,0 +1,20 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"  xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <OverflowToolbar class="sapUiTibyMarginTopBottom" height="auto">
+        <VBox>
+            <Label text="Сотрудник" />
+            <SearchField id="nameFilter" width="200px" placeholder="Имя или Email..." />
+        </VBox>
+        <VBox>
+            <Label text="Отдел" />
+            <Select id="deptFilter" items="{/Departments}" width="200px">
+                <core:Item key="" text="Все отделы" />
+                <core:Item key="{ID}" text="{name}" />
+            </Select>
+        </VBox>
+        <ToolbarSpacer />
+        <Button icon="sap-icon://settings" text="Настройка столбцов" press=".onTableSettings" />
+        <Button icon="sap-icon://sort" text="Сортировка" press=".onSort" />
+        <ToolbarSeparator />
+        <Button text="Go" type="Emphasized" press=".onGo"/>
+    </OverflowToolbar>
+</mvc:View>

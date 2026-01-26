@@ -25,6 +25,11 @@
             "id": "financeCard", 
             "containerId": "financeSection", 
             "manifest": "./cards/FinanceCard/manifest.json" 
+        },
+        { 
+            "id": "staffFilterCard", 
+            "containerId": "staffFilterContainer", 
+            "manifest": "./cards/StaffFilterCard/manifest.json" 
         }
     ]
 }

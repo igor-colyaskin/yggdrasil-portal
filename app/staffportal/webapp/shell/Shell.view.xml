@@ -11,6 +11,7 @@
                     <VBox id="mainVBox" fitContainer="true" >
                         <VBox id="headerSection"/>
                         <VBox id="navSection"/>
+                        <VBox id="staffFilterContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
                         <VBox id="staffTableContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
                         <VBox id="contextStripContainer" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
                         <VBox id="noEmployeeSelectedMessage" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !${ui>/selectedEmployeeID} }">
