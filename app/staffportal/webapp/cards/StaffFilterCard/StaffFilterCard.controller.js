@@ -54,8 +54,31 @@ sap.ui.define([
          * Открытие настроек (будущий P13n)
          */
         onTableSettings: function () {
-            // Пока просто уведомление, скоро добавим сюда P13nDialog
-            sap.m.MessageToast.show("Настройки колонок будут доступны в следующем обновлении")
+            const oView = this.getView()
+
+            if (!this._pSettingsDialog) {
+                // Загружаем фрагмент асинхронно
+                this._pSettingsDialog = sap.ui.core.Fragment.load({
+                    id: oView.getId(),
+                    name: "com.epic.yggdrasil.staffportal.cards.StaffFilterCard.fragments.SettingsDialog",
+                    controller: this // Привязываем этот же контроллер для обработки .onConfirmSettings
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog) // Прокидываем модели во фрагмент
+                    return oDialog
+                })
+            }
+
+            this._pSettingsDialog.then(function (oDialog) {
+                oDialog.open()
+            })
+        },
+
+        onConfirmSettings: function (oEvent) {
+            // Поскольку у нас Two-Way Binding в фрагменте (selected="{ui>...}"),
+            // значения в модели УЖЕ обновились сами!
+            // Нам остается только сохранить их в Storage
+            this.setUIProperty("settings", this.getUIProperty("settings"))
+            sap.m.MessageToast.show("Настройки применены")
         }
     })
 })

@@ -29,12 +29,32 @@ sap.ui.define([
          * Данные из этой модели будут пробрасываться в карточки.
          */
         _initUIModel: function () {
-            // 1. Создаем модель и сразу грузим данные из JSON
             const oModel = new JSONModel()
             oModel.loadData(sap.ui.require.toUrl("com/epic/yggdrasil/staffportal/model/CardConfig.json"), null, false)
-            // false для синхронной загрузки, чтобы карточки были доступны сразу
 
-            // 2. Дополняем модель данными из Storage (которые нельзя хранить в статичном JSON)
+            // Подгружаем настройки колонок из Storage или ставим дефолт
+            const oDefaultSettings = {
+                staffTable: {
+                    columns: {
+                        name: true,
+                        dept: true,
+                        position: true,
+                        email: true,
+                        level: true
+                    }
+                },
+                projectTable: {
+                    columns: {
+                        title: true,
+                        status: true,
+                        deadline: true
+                    }
+                }
+            }
+
+            const oSavedSettings = StorageUtils.readItem("tableSettings") || oDefaultSettings
+            oModel.setProperty("/settings", oSavedSettings)
+
             oModel.setProperty("/selectedEmployeeID", StorageUtils.readItem("selectedID") || "")
             oModel.setProperty("/currentTab", StorageUtils.readItem("currentTab") || "staff")
 

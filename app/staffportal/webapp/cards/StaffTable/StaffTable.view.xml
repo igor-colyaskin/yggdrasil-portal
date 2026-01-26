@@ -14,16 +14,16 @@
         mode="SingleSelectMaster"
         sticky="HeaderToolbar,ColumnHeaders">
         <columns>
-            <Column width="15rem">
+            <Column width="6rem">
                 <Text text="Set as Filter" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <Column id="colName" visible="{ui>/settings/staffTable/columns/name}">
                 <Text text="Employee" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <Column id="colEmail" visible="{ui>/settings/staffTable/columns/email}" width="10rem">
                 <Text text="email" />
             </Column>
-            <Column hAlign="Center" width="8rem">
+            <Column id="colDept" visible="{ui>/settings/staffTable/columns/dept}" width="18rem">
                 <Text text="Department" />
             </Column>
         </columns>
