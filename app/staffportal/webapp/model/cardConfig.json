@@ -30,6 +30,16 @@
             "id": "staffFilterCard", 
             "containerId": "staffFilterContainer", 
             "manifest": "./cards/StaffFilterCard/manifest.json" 
+        },
+        {
+            "id": "projectRegistry",
+            "containerId": "projectRegistrySection",
+            "manifest": "./cards/ProjectRegistry/manifest.json"
+        },
+        {
+            "id": "projectAssignments",
+            "containerId": "projectAssignmentsSection",
+            "manifest": "./cards/ProjectAssignments/manifest.json"
         }
     ]
 }

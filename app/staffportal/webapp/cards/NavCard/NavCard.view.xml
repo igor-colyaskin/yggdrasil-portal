@@ -1,18 +1,21 @@
 <mvc:View
     controllerName="com.epic.yggdrasil.staffportal.cards.NavCard.NavCard"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <IconTabBar 
-        id="navTabBar" 
-        selectedKey="{ui>/currentTab}"
-        select=".onTabSelect" 
-        headerMode="Inline" 
-        stretchContentHeight="true"
-        class="sapUiNoContentPadding">
-        <items>
-            <IconTabFilter key="staff" text="Overview" icon="sap-icon://dimension" />
-            <IconTabFilter key="finance" text="Finance" icon="sap-icon://money-bills" />
-            <IconTabFilter key="projects" text="Projects" icon="sap-icon://add-coursebook" />
-        </items>
-    </IconTabBar>
+    <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiSmallMarginEnd">
+        <IconTabBar 
+            id="navTabBar" 
+            selectedKey="{ui>/currentTab}"
+            select=".onTabSelect" 
+            headerMode="Inline"
+            class="sapUiNoContentPadding">
+            <items>
+                <IconTabFilter key="staff" text="Overview" icon="sap-icon://dimension" />
+                <IconTabFilter key="finance" text="Finance" icon="sap-icon://money-bills" />
+                <IconTabFilter key="registry" text="Registry" icon="sap-icon://project-definition-triangle" />
+                <IconTabFilter key="assignments" text="My Projects" icon="sap-icon://customer-and-contacts" />
+            </items>
+        </IconTabBar>
+    </HBox>
 </mvc:View>

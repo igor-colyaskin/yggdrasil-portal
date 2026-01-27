@@ -1,1 +1,2 @@
 2026-01-26: when I start and a user is selected, and I click tab 'Finance', there is no salary and assets
+2026-01-26: when I hide the Department filter/column in Staff table, after restart I see empty field in Department filter

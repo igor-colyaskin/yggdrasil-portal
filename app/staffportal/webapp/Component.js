@@ -57,7 +57,7 @@ sap.ui.define([
 
             oModel.setProperty("/selectedEmployeeID", StorageUtils.readItem("selectedID") || "")
             oModel.setProperty("/currentTab", StorageUtils.readItem("currentTab") || "staff")
-
+            
             this.setModel(oModel, "ui")
         },
         /**

@@ -26,7 +26,6 @@ sap.ui.define([
         onTabSelect: function (oEvent) {
             const oItem = oEvent.getParameter("item")
             const sKey = oItem.getKey()
-            const sText = oItem.getText()
 
             // 2. Обновляем состояние через SDK
             // Это автоматически обновит модель "ui" в Shell и прогонит данные через Host Context
@@ -37,6 +36,15 @@ sap.ui.define([
             this.publish("Navigation_TabChanged", {
                 tabKey: sKey
             })
-        }
+        },
+
+        onProjectModeChange: function (oEvent) {
+            const sMode = oEvent.getParameter("selectedItem").getKey()
+            // 1. Обновляем модель (это переключит видимость карточек, если мы привяжем их)
+            this.setUIProperty("projectMode", sMode)
+
+            // 2. Оповещаем систему, если кому-то нужно среагировать мгновенно
+            this.publishEvent("Project_Mode_Changed", { mode: sMode })
+        },
     })
 })

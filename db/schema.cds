@@ -41,11 +41,20 @@ entity TechnicalAssets {
 }
 
 // --- СИСТЕМА 3: Project Office (Загрузка в проектах) ---
+// Сущность Проектов
+entity Projects : cuid {
+    name        : String(100);
+    description : String(500);
+    status      : String(20); // Active, Archived, Pipeline
+    deadline    : Date;
+}
+
+// Связка Сотрудник <-> Проект (REST ресурс)
 entity ProjectAssignments : cuid {
-    employeeId    : UUID;
-    projectName   : String(100);
-    roleInProject : String(50);
-    utilization   : Integer; // % загрузки (например, 50 или 100)
+    employeeId : String(50); // ID мага из HRService
+    projectId  : UUID; // Ссылка на Projects
+    role       : String(50);
+    load       : Integer; // % загрузки
 }
 
 // --- СИСТЕМА 4: Coworking (Бронирование мест) ---

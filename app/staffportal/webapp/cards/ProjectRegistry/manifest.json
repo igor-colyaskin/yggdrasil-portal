@@ -1,0 +1,17 @@
+{
+  "sap.app": {
+    "id": "com.epic.yggdrasil.staffportal.cards.ProjectRegistry",
+    "type": "card"
+  },
+  "sap.card": {
+    "type": "Component"
+  },
+  "sap.ui5": {
+    "componentName": "com.epic.yggdrasil.staffportal.cards.ProjectRegistry",
+    "rootView": {
+      "viewName": "com.epic.yggdrasil.staffportal.cards.ProjectRegistry.ProjectRegistry",
+      "type": "XML",
+      "async": true
+    }
+  }
+}

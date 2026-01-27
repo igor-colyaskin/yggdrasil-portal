@@ -1,0 +1,7 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.cards.ProjectRegistry.ProjectRegistry"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+  
+    <Text text="Projects Registry Placeholder"></Text>
+</mvc:View>

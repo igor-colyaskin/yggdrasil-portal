@@ -12,7 +12,10 @@ service FinanceService @(path: '/finance') {
     entity Assets   as projection on db.TechnicalAssets;
 }
 
-// Производственный сервис (Для карточек проектов)
 service ProjectService @(path: '/odata/v4/projects') {
+    // Для Registry
+    entity Projects as projection on db.Projects;
+    
+    // Для Assignments и деталей проекта
     entity Assignments as projection on db.ProjectAssignments;
 }

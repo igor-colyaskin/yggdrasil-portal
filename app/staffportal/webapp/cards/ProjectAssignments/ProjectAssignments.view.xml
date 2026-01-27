@@ -1,0 +1,6 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.cards.ProjectAssignments.ProjectAssignments"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Text text="Project Assignments"></Text>
+</mvc:View>

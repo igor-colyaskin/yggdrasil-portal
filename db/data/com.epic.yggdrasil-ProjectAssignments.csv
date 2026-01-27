@@ -1,0 +1,10 @@
+ID;employeeId;projectId;role;load
+asgn-01;e1b2c3d4-a1b2-c3d4-d5e6-f7g8h9i0j1k2;P-YGG;Lead Architect;50
+asgn-02;b5c6d7e8-b2c3-d4e5-f6g7-h8i9j0k1l2m3;P-YGG;Alchemist;50
+asgn-03;emp-03;P-YGG;Security Advisor;100
+asgn-04;emp-06;P-CHOC;Owner;10
+asgn-05;emp-17;P-CHOC;Process Eng;100
+asgn-06;emp-11;P-RING;External Consultant;5
+asgn-07;emp-22;P-RING;Field Tester;100
+asgn-08;emp-15;P-STARK;Main Engineer;80
+asgn-09;emp-16;P-STARK;Web Intern;100

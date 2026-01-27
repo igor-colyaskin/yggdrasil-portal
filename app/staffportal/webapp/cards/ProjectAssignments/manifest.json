@@ -1,6 +1,6 @@
 {
   "sap.app": {
-    "id": "com.epic.yggdrasil.staffportal.cards.StaffTable",
+    "id": "com.epic.yggdrasil.staffportal.cards.ProjectAssignments",
     "type": "card"
   },
   "sap.card": {
@@ -13,13 +13,12 @@
       }
     },
     "header": {
-      "title": "Сотрудники",
-      "subTitle": "Список персонала (v4)"
+      "title": "Assignments"
     }
   },
   "sap.ui5": {
     "rootView": {
-      "viewName": "com.epic.yggdrasil.staffportal.cards.StaffTable.StaffTable",
+      "viewName": "com.epic.yggdrasil.staffportal.cards.ProjectAssignments.ProjectAssignments",
       "type": "XML",
       "async": true
     }
