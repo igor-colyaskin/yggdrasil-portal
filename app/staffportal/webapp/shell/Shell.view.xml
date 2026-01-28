@@ -15,7 +15,6 @@
                         <VBox id="staffTableContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
                         <VBox id="contextStripContainer" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
                         <VBox id="projectRegistrySection" visible="{= ${ui>/currentTab} === 'registry' }"/>
-                        <VBox id="projectAssignmentsSection" visible="{= ${ui>/currentTab} === 'assignments' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
                         <VBox id="noEmployeeSelectedMessage" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !${ui>/selectedEmployeeID} }">
                             <IllustratedMessage 
                                 id="noEmployeeMessage" title="Никто не выбран" 

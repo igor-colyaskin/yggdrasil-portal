@@ -4,10 +4,21 @@
     "type": "card"
   },
   "sap.card": {
-    "type": "Component"
+    "type": "Component",
+    "configuration": {
+      "destinations": {
+        "projectService": {
+          "name": "projectService"
+        }
+      }
+    }
   },
   "sap.ui5": {
-    "componentName": "com.epic.yggdrasil.staffportal.cards.ProjectRegistry",
+    "models": {
+      "projects": {
+        "type": "sap.ui.model.json.JSONModel"
+      }
+    },
     "rootView": {
       "viewName": "com.epic.yggdrasil.staffportal.cards.ProjectRegistry.ProjectRegistry",
       "type": "XML",

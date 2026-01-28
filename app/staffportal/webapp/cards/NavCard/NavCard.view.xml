@@ -14,7 +14,7 @@
                 <IconTabFilter key="staff" text="Overview" icon="sap-icon://dimension" />
                 <IconTabFilter key="finance" text="Finance" icon="sap-icon://money-bills" />
                 <IconTabFilter key="registry" text="Registry" icon="sap-icon://project-definition-triangle" />
-                <IconTabFilter key="assignments" text="My Projects" icon="sap-icon://customer-and-contacts" />
+                <!-- <IconTabFilter key="assignments" text="My Projects" icon="sap-icon://customer-and-contacts" /> -->
             </items>
         </IconTabBar>
     </HBox>

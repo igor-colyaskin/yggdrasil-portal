@@ -41,20 +41,12 @@
             "manifest": "./cards/ProjectRegistry/manifest.json"
         },
         {
-            "id": "projectAssignments",
-            "containerId": "projectAssignmentsSection",
-            "loadType": "dynamic",
-            "tab": "assignments",
-            "manifest": "./cards/ProjectAssignments/manifest.json"
-        },
-        {
             "id": "contextStripCard",
             "containerId": "contextStripContainer",
             "loadType": "dynamic",
             "tab": [
                 "finance",
-                "assignments",
-                "registry"
+                "assignments"
             ],
             "manifest": "./cards/ContextStrip/manifest.json"
         }
