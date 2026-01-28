@@ -55,9 +55,12 @@ sap.ui.define([
             const oSavedSettings = StorageUtils.readItem("tableSettings") || oDefaultSettings
             oModel.setProperty("/settings", oSavedSettings)
 
-            oModel.setProperty("/selectedEmployeeID", StorageUtils.readItem("selectedID") || "")
-            oModel.setProperty("/currentTab", StorageUtils.readItem("currentTab") || "staff")
-            
+            const sSavedTab = StorageUtils.readItem("currentTab") || "staff"
+            oModel.setProperty("/currentTab", sSavedTab)
+
+            const sSavedID = StorageUtils.readItem("selectedID") || ""
+            oModel.setProperty("/selectedEmployeeID", sSavedID)
+
             this.setModel(oModel, "ui")
         },
         /**
@@ -76,22 +79,42 @@ sap.ui.define([
 
             this._oHost.setContext = (mCtx) => {
                 if (mCtx) {
-                    // Обновляем модель (это автоматически обновит биндинги во всех карточках)
                     Object.keys(mCtx).forEach(sKey => {
-                        // console.log(`📡 [Component]: Updating model key "${sKey}" with value:`, mCtx[sKey]) // <-- ПРОВЕРКА 2
+                        // 1. Обновляем живую модель в памяти
                         oUiModel.setProperty("/" + sKey, mCtx[sKey])
+
+                        // 2. Автоматическое сохранение в LocalStorage
+                        // Сохраняем всё: и selectedEmployeeID, и currentTab, и что угодно еще
+                        const aPersistentKeys = ["selectedEmployeeID", "currentTab"]
+                        if (aPersistentKeys.includes(sKey)) {
+                            // Мапим ключ модели на ключ хранилища для красоты, если нужно
+                            const sStorageKey = sKey === "selectedEmployeeID" ? "selectedID" : sKey
+                            StorageUtils.setItem(sStorageKey, mCtx[sKey])
+                        }
                     })
 
-                    // Если изменился ID — сохраняем в Storage
-                    if (mCtx.selectedEmployeeID) {
-                        StorageUtils.setItem("selectedID", mCtx.selectedEmployeeID)
-                    }
-
-                    // Уведомляем карточки об изменении конфигурации
                     this._oHost.fireEvent("configurationChange")
-                    // console.log("🌐 [Host Context]: Updated & Persisted", oUiModel.getData())
                 }
             }
+
+            // this._oHost.setContext = (mCtx) => {
+            //     if (mCtx) {
+            //         // Обновляем модель (это автоматически обновит биндинги во всех карточках)
+            //         Object.keys(mCtx).forEach(sKey => {
+            //             // console.log(`📡 [Component]: Updating model key "${sKey}" with value:`, mCtx[sKey]) // <-- ПРОВЕРКА 2
+            //             oUiModel.setProperty("/" + sKey, mCtx[sKey])
+            //         })
+
+            //         // Если изменился ID — сохраняем в Storage
+            //         if (mCtx.selectedEmployeeID) {
+            //             StorageUtils.setItem("selectedID", mCtx.selectedEmployeeID)
+            //         }
+
+            //         // Уведомляем карточки об изменении конфигурации
+            //         this._oHost.fireEvent("configurationChange")
+            //         // console.log("🌐 [Host Context]: Updated & Persisted", oUiModel.getData())
+            //     }
+            // }
 
             // --- 2. Эфирный Резонантор (PubSub) ---
             this._oHost.publishEvent = (sName, oData) => {
