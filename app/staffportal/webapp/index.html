@@ -13,7 +13,7 @@
       data-sap-ui-async="true"
       data-sap-ui-xx-disableComponentPreload=true
       data-sap-ui-resourceroots='{
-            "com.epic.yggdrasil.staffportal": "./"
+            "com.epic.nebula": "./"
         }'
     ></script>
   </head>
@@ -25,7 +25,7 @@
         sap.ui.getCore().attachInit(() => {
           sap.ui.require(['sap/ui/core/ComponentContainer'], ComponentContainer => {
             new ComponentContainer({
-              name: 'com.epic.yggdrasil.staffportal',
+              name: 'com.epic.nebula',
               height: '100%',
               settings: { id: 'shell' },
               async: true,

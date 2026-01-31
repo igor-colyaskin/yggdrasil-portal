@@ -1,22 +1,18 @@
-## yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "4.0"
 metadata:
-  name: com.epic.yggdrasil.staffportal
+  name: com.epic.nebula # Новый ID
 type: application
 server:
   customMiddleware:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertErrors: false
         backend:
-        - path: /odata/v4/hr
-          url: http://localhost:4004
-        - path: /odata/v2/finance
-          url: http://localhost:4004
-        - path: /odata/v4/projects
-          url: http://localhost:4004
+          - path: /portal-config # Наш будущий сервис чертежей
+            url: http://localhost:4004
+          - path: /odata/v4/main
+            url: http://localhost:4004
         ui5:
           path:
             - /resources
@@ -28,8 +24,3 @@ server:
         port: 35729
         path: webapp
         delay: 300
-    - name: fiori-tools-preview
-      afterMiddleware: fiori-tools-appreload
-      configuration:
-        flp:
-          theme: sap_horizon

@@ -1,0 +1,26 @@
+{
+  "sap.app": {
+    "id": "com.epic.nebula.cards.simple",
+    "type": "card"
+  },
+  "sap.card": {
+    "type": "Component",
+    "configuration": {
+      "parameters": {
+        "title": {
+          "value": "Заголовок"
+        },
+        "description": {
+          "value": "Описание планеты"
+        }
+      }
+    },
+    "sap.ui5": {
+      "componentName": "com.epic.nebula.cards.simple",
+      "rootView": {
+        "viewName": "com.epic.nebula.cards.simple.SimpleCard",
+        "type": "XML"
+      }
+    }
+  }
+}

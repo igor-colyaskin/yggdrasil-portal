@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog
+        id="identityDialog"
+        title="Select Your Role"
+        type="Message">
+        <content>
+            <List id="roleList" mode="SingleSelectMaster" selectionChange=".onIdentityConfirm">
+                <StandardListItem title="Basic" description="Standard Access (Staff only)" icon="sap-icon://user-settings" />
+                <StandardListItem title="Manager" description="Extended Access (Staff &amp; Projects)" icon="sap-icon://manager" />
+                <StandardListItem title="Admin" description="Full Galactic Control" icon="sap-icon://key" />
+            </List>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

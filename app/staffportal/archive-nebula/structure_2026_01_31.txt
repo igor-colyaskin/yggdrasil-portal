@@ -1,0 +1,13 @@
+webapp/
+├── cards/                  # Библиотека "Планет"
+│   ├── header/             # Big Bang (Всегда сверху)
+│   ├── nav/                # Карта Галактики (NavigationCard)
+│   └── simple/             # Универсальный кирпич (Title + Text)
+├── shell/                  # Сборочный цех (Nebula Forge)
+│   ├── fragments/          # Чертежи (IdentityDialog, HomeLayout)
+│   ├── Shell.view.xml      # Чистый холст (galaxyCore)
+│   └── Shell.controller.js # Главный инженер (Forge Logic)
+├── lib/                    # SDK (BaseController, StorageUtils)
+├── model/                  # (Пусто, ждем данные от CAP)
+├── Component.js            # Инициализация epicHost
+└── manifest.json           # Описание приложения

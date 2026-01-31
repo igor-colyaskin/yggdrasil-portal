@@ -1,58 +1,16 @@
 {
   "_version": "1.60.0",
-  "sap.ui": {
-    "technology": "UI5",
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    },
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "tablet": ""
-    }
-  },
   "sap.app": {
-    "id": "com.epic.yggdrasil.staffportal",
+    "id": "com.epic.nebula",
     "type": "application",
-    "title": "Yggdrasil Saga Portal",
+    "title": "Nebula Portal Engine",
     "applicationVersion": {
       "version": "1.0.0"
-    },
-    "dataSources": {
-      "mainService": {
-        "uri": "/odata/v4/hr/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "4.0"
-        }
-      },
-      "financeService": {
-        "uri": "/odata/v2/finance/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "2.0"
-        }
-      },
-      "projectService": {
-        "uri": "/odata/v4/projects/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "4.0"
-        }
-      }
     }
   },
   "sap.ui5": {
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
-    },
-    "flexEnabled": true,
     "rootView": {
-      "viewName": "com.epic.yggdrasil.staffportal.shell.Shell",
+      "viewName": "com.epic.nebula.shell.Shell",
       "type": "XML",
       "async": true,
       "id": "shellView"
@@ -67,51 +25,37 @@
       }
     },
     "resourceRoots": {
-      "com.sap.fiorireuselibrary.ui5cardssdk": "./lib/sdkcard"
+      "com.epic.nebula.lib": "./lib"
     },
     "models": {
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.epic.yggdrasil.staffportal.i18n.i18n"
+          "bundleName": "com.epic.nebula.i18n.i18n"
         }
       },
-      "": {
-        "dataSource": "mainService",
-        "type": "sap.ui.model.odata.v4.ODataModel",
-        "settings": {
-          "autoExpandSelect": true,
-          "operationMode": "Server",
-          "groupId": "$auto"
-        }
-      },
-      "fin": {
-        "dataSource": "financeService",
-        "type": "sap.ui.model.odata.v2.ODataModel"
-      },
-      "proj": {
-        "dataSource": "projectService",
-        "type": "sap.ui.model.odata.v4.ODataModel"
+      "ui": {
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
-        "controlId": "staffApp",
+        "controlId": "nebulaApp",
         "controlAggregation": "pages",
         "async": true
       },
       "routes": [
         {
-          "name": "master",
+          "name": "home",
           "pattern": "",
-          "target": "master"
+          "target": "home"
         }
       ],
       "targets": {
-        "master": {
-          "viewName": "com.epic.yggdrasil.staffportal.shell.Shell"
+        "home": {
+          "viewName": "com.epic.nebula.shell.Shell"
         }
       }
     }

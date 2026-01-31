@@ -1,8 +1,0 @@
-<mvc:View
-    controllerName="com.epic.yggdrasil.staffportal.cards.HeaderCard.HeaderCard"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <VBox class="sapUiSmallMargin">
-        <Text text="An ash I know, Yggdrasil its name..." />
-    </VBox>
-</mvc:View>

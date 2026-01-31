@@ -1,104 +1,121 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "com/epic/yggdrasil/staffportal/model/formatter",
+    "com/epic/nebula/lib/sdkcard/Base.controller", // Наследуемся от твоего SDK
     "sap/ui/model/json/JSONModel",
-    "com/epic/yggdrasil/staffportal/lib/sdkcard/StorageUtils" // Подключаем утилиты
-], function (Controller, formatter, JSONModel, StorageUtils) {
+    "sap/ui/core/Fragment",
+    "sap/ui/integration/widgets/Card"
+], function (BaseController, JSONModel, Fragment, Card) {
     "use strict"
 
-    return Controller.extend("com.epic.yggdrasil.staffportal.shell.Shell", {
-        onInit: function () {
-            this._setupHostCommunication()
-            this._initPortalCards()
-        },
+    return BaseController.extend("com.epic.nebula.shell.Shell", {
 
-        _setupHostCommunication: function () {
-            const oHost = this.getOwnerComponent().getHost()
-
-            oHost.subscribeEvent("Navigation_TabChanged", (oEvent) => {
-                const sTabKey = oEvent.getParameter("tabKey")
-
-                // 1. Синхронизируем состояние и Storage
-                this.getOwnerComponent().getHost().setContext({ currentTab: sTabKey })
-
-                // 2. Лениво догружаем карточки для этой табы (если их там еще нет)
-                this._loadCardsByTab(sTabKey)
-            }, this)
-        },
-
-        // _initPortalCards: function () {
-        //     const oHost = this.getOwnerComponent().getHost()
-        //     const oMainModel = this.getOwnerComponent().getModel()
-        //     const oUiModel = this.getOwnerComponent().getModel("ui")
-
-        //     oUiModel.getProperty("/cards").forEach(oConf => {
-        //         const oContainer = this.getView().byId(oConf.containerId)
-        //         if (oContainer) {
-        //             oContainer.destroyItems()
-        //             // Форсируем передачу модели из Shell (Компонента) в Карточку
-        //             oContainer.setModel(oMainModel)
-        //             // И не забываем про модель UI (где лежит currentTab)
-        //             oContainer.setModel(oUiModel, "ui")
-
-        //             const oCard = new sap.ui.integration.widgets.Card({
-        //                 id: this.getView().createId(oConf.id),
-        //                 manifest: oConf.manifest,
-        //                 host: oHost
-        //             })
-        //             oContainer.addItem(oCard)
-        //         }
-        //     })
-        // }
-        // В Shell.controller.js
-
-        _initPortalCards: function () {
-            const oUiModel = this.getOwnerComponent().getModel("ui")
-            const aCards = oUiModel.getProperty("/cards") || []
-
-            // 1. Сначала грузим всю статику (Header, Nav)
-            aCards.filter(c => c.loadType === "static").forEach(c => this._loadCardById(c.id))
-
-            // 2. Затем грузим то, что должно быть открыто прямо сейчас (из Storage)
-            const sCurrentTab = oUiModel.getProperty("/currentTab")
-            this._loadCardsByTab(sCurrentTab)
-        },
-
-        /**
-         * Загрузка всех динамических карточек для конкретной табы
-         */
-        _loadCardsByTab: function (sTabKey) {
-            const aCards = this.getOwnerComponent().getModel("ui").getProperty("/cards") || []
-
-            aCards.filter(c => {
-                if (c.loadType !== "dynamic") return false
-                // Проверяем, подходит ли таба (с учетом того, что tab может быть массивом)
-                return Array.isArray(c.tab) ? c.tab.includes(sTabKey) : c.tab === sTabKey
-            }).forEach(c => this._loadCardById(c.id))
-        },
-
-        /**
-         * Атомарный метод загрузки одной карточки
-         */
-        _loadCardById: function (sCardId) {
-            const oView = this.getView()
-            const oConf = oView.getModel("ui").getProperty("/cards").find(c => c.id === sCardId)
-            const oContainer = oView.byId(oConf.containerId)
-
-            // Если контейнер есть и он пуст — создаем карточку
-            if (oContainer && oContainer.getItems().length === 0) {
-                const oCard = new sap.ui.integration.widgets.Card({
-                    id: oView.createId(oConf.id),
-                    manifest: oConf.manifest,
-                    host: this.getOwnerComponent().getHost()
-                })
-
-                // Прокидываем модели для биндингов visible и прочего
-                oContainer.setModel(this.getOwnerComponent().getModel())
-                oContainer.setModel(oView.getModel("ui"), "ui")
-
-                oContainer.addItem(oCard)
-                console.log(`✅ [Shell]: Loaded ${oConf.loadType} card -> ${sCardId}`)
+        // --- СИМУЛЯТОР БЭКЕНДА (Чертежи систем) ---
+        _mRoleConfigs: {
+            "Admin": {
+                navigation: [
+                    { tab: "home", label: "Home", pagePath: "home" },
+                    { tab: "staff", label: "Staff", pagePath: "staff" },
+                    { tab: "admin", label: "Admin Panel", pagePath: "admin" }
+                ]
+            },
+            "Basic": {
+                navigation: [
+                    { tab: "home", label: "Home", pagePath: "home" },
+                    { tab: "staff", label: "Staff", pagePath: "staff" }
+                ]
             }
+        },
+        onInit: function () {
+            // Инициализируем UI модель
+            const oUiModel = new JSONModel({
+                currentRole: "",
+                currentTab: "home"
+            })
+            this.getView().setModel(oUiModel, "ui")
+
+            // Проверяем сохраненную роль
+            const sSavedRole = localStorage.getItem("nebulaRole")
+            if (sSavedRole) {
+                this._launchNebula(sSavedRole)
+            } else {
+                this._openIdentityDialog()
+            }
+        },
+
+        // --- IDENTITY ORACLE ---
+        _openIdentityDialog: function () {
+            if (!this._pIdentityDialog) {
+                this._pIdentityDialog = Fragment.load({
+                    id: this.getView().getId(),
+                    name: "com.epic.nebula.shell.fragments.IdentityDialog",
+                    controller: this
+                }).then(oDialog => {
+                    this.getView().addDependent(oDialog)
+                    return oDialog
+                })
+            }
+            this._pIdentityDialog.then(oDialog => oDialog.open())
+        },
+
+        onIdentityConfirm: function (oEvent) {
+            const oSelectedItem = oEvent.getParameter("listItem")
+            const sRole = oSelectedItem.getTitle()
+
+            // Сохраняем и запускаем
+            localStorage.setItem("nebulaRole", sRole)
+
+            // Закрываем диалог
+            this.byId("identityDialog").close()
+
+            this._launchNebula(sRole)
+        },
+
+        onResetIdentity: function () {
+            localStorage.removeItem("nebulaRole")
+            location.reload() // Полная перезагрузка для чистоты Генезиса
+        },
+
+        // --- GENESIS LOGIC ---
+        _launchNebula: function (sRole) {
+            this.getView().getModel("ui").setProperty("/currentRole", sRole)
+
+            // 1. Получаем "карту" для роли
+            const oConfig = this._mRoleConfigs[sRole] || this._mRoleConfigs["Basic"]
+
+            // 2. Строим навигацию (пока просто логи в консоль, скоро добавим NavCard)
+            console.log(`🌌 Nebula Engine: Роль [${sRole}] принята. Карта загружена.`)
+
+            // 3. Открываем Home по умолчанию
+            this._assemblePage("home")
+        },
+
+        // --- PAGE ASSEMBLER (Сборочный цех) ---
+        _assemblePage: function (sPageId) {
+            const oCore = this.byId("galaxyCore")
+            oCore.destroyItems() // Очищаем старую систему
+
+            // Имитируем разные страницы через SimpleCard
+            if (sPageId === "home") {
+                this._forgeCard({
+                    title: "Добро пожаловать в Nebula",
+                    description: `Вы вошли как ${this.getView().getModel("ui").getProperty("/currentRole")}. Начните исследование систем.`
+                })
+            } else if (sPageId === "staff") {
+                this._forgeCard({ title: "Система: Персонал", description: "Список магических сущностей портала." })
+            }
+        },
+
+        // --- THE FORGE (Метод отливки карточки) ---
+        _forgeCard: function (oParams) {
+            const oCard = new Card({
+                manifest: "./cards/simple/manifest.json",
+                parameters: {
+                    "title": oParams.title,
+                    "description": oParams.description
+                }
+            })
+
+            // Добавляем карточку в ядро галактики
+            this.byId("galaxyCore").addItem(oCard)
         }
     })
 })
