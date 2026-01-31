@@ -8,9 +8,8 @@
   "sap.card": {
     "type": "Component",
     "header": {
-      "title": "Информация о сотруднике",
-      "subTitle": "Детальный вид",
-      "icon": { "src": "sap-icon://person-placeholder" }
+      "title": "Yggdrasil Portal",
+      "icon": { "src": "sap-icon://tree" }
     },
     "configuration": {
       "parameters": {

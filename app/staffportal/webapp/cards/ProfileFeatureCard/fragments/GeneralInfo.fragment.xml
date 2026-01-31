@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <VBox>
+        <Title text="Магический профиль (v2.0)" />
+        <Text text="Здесь будет инфо о сотруднике: {ui>/selectedEmployeeID}" />
+    </VBox>
+</core:FragmentDefinition>

@@ -49,6 +49,39 @@
                 "assignments"
             ],
             "manifest": "./cards/ContextStrip/manifest.json"
+        },
+        {
+            "id": "magicInfo",
+            "containerId": "magicInfoSection",
+            "loadType": "dynamic",
+            "tab": "magicProfile",
+            "manifest": "./cards/ProfileFeatureCard/manifest.json",
+            "settings": {
+                "featureKey": "INFO",
+                "displayTitle": "Общая информация мага"
+            }
+        },
+        {
+            "id": "magicSalary",
+            "containerId": "magicSalarySection",
+            "loadType": "dynamic",
+            "tab": "magicProfile",
+            "manifest": "./cards/ProfileFeatureCard/manifest.json",
+            "settings": {
+                "featureKey": "SALARY",
+                "displayTitle": "Золото и жалование"
+            }
+        },
+        {
+            "id": "magicEquipment",
+            "containerId": "magicEquipmentSection",
+            "loadType": "dynamic",
+            "tab": "magicProfile",
+            "manifest": "./cards/ProfileFeatureCard/manifest.json",
+            "settings": {
+                "featureKey": "EQUIPMENT",
+                "displayTitle": "Артефакты и снаряжение"
+            }
         }
     ]
 }

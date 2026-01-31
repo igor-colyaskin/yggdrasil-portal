@@ -13,15 +13,20 @@
                         <VBox id="navSection"/>
                         <VBox id="staffFilterContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
                         <VBox id="staffTableContainer" visible="{= ${ui>/currentTab} === 'staff' }"/>
-                        <VBox id="contextStripContainer" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
+                        <VBox id="contextStripContainer" visible="{= ${ui>/currentTab} === 'finance' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
                         <VBox id="projectRegistrySection" visible="{= ${ui>/currentTab} === 'registry' }"/>
-                        <VBox id="noEmployeeSelectedMessage" visible="{= ${ui>/currentTab} !== 'staff' &amp;&amp; !${ui>/selectedEmployeeID} }">
+                        <VBox id="noEmployeeSelectedMessage" visible="{= ${ui>/currentTab} === 'finance' &amp;&amp; !${ui>/selectedEmployeeID} }">
                             <IllustratedMessage 
                                 id="noEmployeeMessage" title="Никто не выбран" 
                                 description="Вернитесь на вкладку Персонал и выберите сотрудника для анализа" 
                                 illustrationType="sapIllu-SearchEarth" />
                         </VBox>
                         <VBox id="financeSection" visible="{= ${ui>/currentTab} === 'finance' &amp;&amp; !!${ui>/selectedEmployeeID} }"/>
+                        <VBox id="magicProfileSection" visible="{= ${ui>/currentTab} === 'magicProfile' }">
+                            <VBox id="magicInfoSection" />
+                            <VBox id="magicSalarySection" />
+                            <VBox id="magicEquipmentSection" />
+                        </VBox>
                     </VBox>
                 </content>
             </Page>
