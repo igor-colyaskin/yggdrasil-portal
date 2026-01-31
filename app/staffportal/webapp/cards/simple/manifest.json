@@ -22,5 +22,12 @@
         "type": "XML"
       }
     }
+  },
+  "sap.ui5": {
+    "componentName": "com.epic.nebula.cards.simple",
+    "rootView": {
+      "viewName": "com.epic.nebula.cards.simple.SimpleCard",
+      "type": "XML"
+    }
   }
 }

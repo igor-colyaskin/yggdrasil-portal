@@ -11,8 +11,12 @@ sap.ui.define([
          * Быстрый доступ к инстансу интеграционной карточки
          */
         getCard: function () {
-            // В Component-карточках объект передается через componentData
-            return this.getOwnerComponent().getComponentData().__sapUiIntegration_card
+            const oComponentData = this.getOwnerComponent().getComponentData()
+            if (!oComponentData) {
+                return null
+            }
+            // Проверяем оба варианта имени свойства
+            return oComponentData.__sapUiIntegration_card || oComponentData.card || null
         },
 
         /**

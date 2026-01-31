@@ -17,6 +17,12 @@ sap.ui.define([
                     { tab: "admin", label: "Admin Panel", pagePath: "admin" }
                 ]
             },
+            "Manager": {
+                navigation: [
+                    { tab: "home", label: "Home", pagePath: "home" },
+                    { tab: "staff", label: "Staff", pagePath: "staff" }
+                ]
+            },
             "Basic": {
                 navigation: [
                     { tab: "home", label: "Home", pagePath: "home" },
@@ -75,20 +81,99 @@ sap.ui.define([
         },
 
         // --- GENESIS LOGIC ---
-        _launchNebula: function (sRole) {
-            this.getView().getModel("ui").setProperty("/currentRole", sRole)
+        _launchNebula: async function (sRole) {
+            const oUiModel = this.getView().getModel("ui")
+            oUiModel.setProperty("/currentRole", sRole)
 
-            // 1. Получаем "карту" для роли
-            const oConfig = this._mRoleConfigs[sRole] || this._mRoleConfigs["Basic"]
+            // 1. ВКЛЮЧАЕМ ИНДИКАТОР
+            this.byId("nebulaLoader").setVisible(true)
 
-            // 2. Строим навигацию (пока просто логи в консоль, скоро добавим NavCard)
-            console.log(`🌌 Nebula Engine: Роль [${sRole}] принята. Карта загружена.`)
+            // 2. STAGE 1 & 2 (Имитируем задержку и загрузку)
+            const oConfig = this._mRoleConfigs[sRole]
 
-            // 3. Открываем Home по умолчанию
+            // Искусственно ждем 500мс для стабильности UX
+            await new Promise(resolve => setTimeout(resolve, 500))
+
+            // Выключаем индикатор
+            this.byId("nebulaLoader").setVisible(false)
+
+            // 3. СОЗДАЕМ НАВИГАЦИЮ
+            this._forgeNavigation(oConfig.navigation)
+
+            // 4. ОТКРЫВАЕМ HOME
             this._assemblePage("home")
+
+            // 5. STAGE 3: Фоновая загрузка данных (Placeholder)
+            this._preFetchSystemsData(oConfig.navigation)
         },
 
-        // --- PAGE ASSEMBLER (Сборочный цех) ---
+        /**
+ * STAGE 3: Background Pre-fetching
+ * Прогрев данных для всех доступных систем галактики
+ */
+        _preFetchSystemsData: async function (aNavigationItems) {
+            console.log("🛰️ Nebula Engine: Starting Stage 3 (Background Fetch)...")
+
+            // Фильтруем Home (он и так загружен) и запускаем загрузку для остальных систем
+            const aSystemsToLoad = aNavigationItems.filter(item => item.tab !== "home")
+
+            // Используем Promise.allSettled, чтобы если одна "система" упала, остальные догрузились
+            await Promise.allSettled(aSystemsToLoad.map(async (oSystem) => {
+                try {
+                    console.log(`📡 Pre-fetching layout and data for system: ${oSystem.label}...`)
+
+                    // Имитируем сетевую задержку для каждой системы
+                    await new Promise(resolve => setTimeout(resolve, 800))
+
+                    // Здесь в будущем будет вызов: 
+                    // const oLayout = await this._getSystemLayout(oSystem.pagePath);
+                    // this._cacheSystem(oSystem.tab, oLayout);
+
+                    console.log(`✅ System [${oSystem.tab}] is cached and ready.`)
+                } catch (oError) {
+                    console.error(`❌ Failed to pre-fetch system [${oSystem.tab}]:`, oError)
+                }
+            }))
+
+            console.log("🌌 All systems are synchronized. Total readiness achieved.")
+        },
+
+        _forgeNavigation: function (aItems) {
+            const oNavContainer = this.byId("navContainer")
+            oNavContainer.destroyItems()
+
+            // Находим хост
+            const oHost = sap.ui.getCore().byId("nebulaHost") ||
+                (sap.ui.core.Element && sap.ui.core.Element.getElementById("nebulaHost"))
+
+            if (!oHost) {
+                console.error("💀 Nebula Fatal: nebulaHost not found!")
+                return
+            }
+
+            // 1. ВАЖНО: Используем setContext вместо прямого setProperty.
+            // Это обновит модель "ui" И вызовет fireEvent("configurationChange")
+            oHost.setContext({
+                currentRoleConfig: {
+                    navigation: aItems
+                }
+            })
+
+            // 2. Создаем карточку
+            const oNavCard = new sap.ui.integration.widgets.Card({
+                manifest: "./cards/nav/manifest.json",
+                host: oHost
+            })
+
+            oNavContainer.addItem(oNavCard)
+
+            // 3. Подписка
+            oHost.subscribeEvent("nebulaTabChange", (oEvent) => {
+                const sTab = oEvent.getParameter ? oEvent.getParameter("tab") : oEvent.mParameters.tab
+                console.log("🌌 Shell: Received tab change signal:", sTab)
+                this._assemblePage(sTab)
+            })
+        },
         _assemblePage: function (sPageId) {
             const oCore = this.byId("galaxyCore")
             oCore.destroyItems() // Очищаем старую систему
@@ -106,15 +191,19 @@ sap.ui.define([
 
         // --- THE FORGE (Метод отливки карточки) ---
         _forgeCard: function (oParams) {
+            const sManifestUrl = sap.ui.require.toUrl("com/epic/nebula/cards/simple/manifest.json")
+
             const oCard = new Card({
-                manifest: "./cards/simple/manifest.json",
+                manifest: sManifestUrl,
+                baseUrl: sManifestUrl.replace("manifest.json", ""),
+                host: this.getOwnerComponent().getHost(),
+                // Передаем параметры напрямую
                 parameters: {
                     "title": oParams.title,
                     "description": oParams.description
                 }
             })
 
-            // Добавляем карточку в ядро галактики
             this.byId("galaxyCore").addItem(oCard)
         }
     })

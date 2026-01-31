@@ -1,0 +1,24 @@
+{
+  "sap.app": {
+    "id": "com.epic.nebula.cards.nav",
+    "type": "card"
+  },
+  "sap.card": {
+    "type": "Component",
+    "configuration": {
+      "parameters": {
+        "instanceId": {
+          "value": ""
+        }
+      }
+    }
+  },
+  "sap.ui5": {
+    "componentName": "com.epic.nebula.cards.nav",
+    "rootView": {
+      "viewName": "com.epic.nebula.cards.nav.NavCard",
+      "type": "XML",
+      "async": true
+    }
+  }
+}

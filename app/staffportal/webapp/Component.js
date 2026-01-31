@@ -24,11 +24,35 @@ sap.ui.define([
         },
 
         _setupNebulaHost: function () {
-            // Создаем Хост, через который карточки будут общаться с порталом
+            // 1. Создаем Хост с фиксированным ID для глобального поиска
             this._oHost = new Host("nebulaHost")
-            this._oResonator = new EventProvider()
+            this._oResonator = new sap.ui.base.EventProvider()
 
-            // Эфирный Резонантор (PubSub)
+            const oUiModel = this.getModel("ui")
+
+            // --- Shared Context: Мост между Хостом и моделью UI ---
+            this._oHost.getContext = () => {
+                // Возвращаем промис с данными всей модели "ui"
+                return Promise.resolve(oUiModel.getData())
+            }
+
+            this._oHost.setContext = (mCtx) => {
+                if (mCtx) {
+                    Object.keys(mCtx).forEach(sKey => {
+                        oUiModel.setProperty("/" + sKey, mCtx[sKey])
+
+                        // Persistence logic (как у тебя была)
+                        const aPersistentKeys = ["selectedEmployeeID", "currentTab"]
+                        if (aPersistentKeys.includes(sKey)) {
+                            const sStorageKey = sKey === "selectedEmployeeID" ? "selectedID" : sKey
+                            StorageUtils.setItem(sStorageKey, mCtx[sKey])
+                        }
+                    })
+                    this._oHost.fireEvent("configurationChange")
+                }
+            }
+
+            // --- PubSub: Эфирный Резонантор ---
             this._oHost.publishEvent = (sName, oData) => {
                 this._oResonator.fireEvent(sName, oData)
             }
@@ -37,16 +61,16 @@ sap.ui.define([
                 this._oResonator.attachEvent(sName, fnCallback, oListener)
             }
 
-            // Централизованный резолвер адресов (на будущее для CAP)
+            // --- Resolver: Пути к сервисам ---
             this._oHost.resolveDestination = (sName) => {
                 const mDestinations = {
-                    "configService": "/portal-config",
-                    "dataService": "/odata/v4/main"
+                    "hrService": "/odata/v4/hr",
+                    "financeService": "/finance",
+                    "projectService": "/odata/v4/projects"
                 }
                 return mDestinations[sName] || ""
             }
         },
-
         getHost: function () {
             return this._oHost
         }

@@ -1,0 +1,17 @@
+<mvc:View 
+    controllerName="com.epic.nebula.cards.nav.NavCard"    
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns="sap.m">
+    <IconTabBar 
+        id="navBar" 
+        select=".onTabSelect" 
+        items="{cardData>/items}"
+        headerMode="Inline"
+        class="sapUiMediumMarginBegin">
+        <items>
+            <IconTabFilter 
+                text="{cardData>label}" 
+                key="{cardData>tab}" />
+        </items>
+    </IconTabBar>
+</mvc:View>

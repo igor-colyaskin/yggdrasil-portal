@@ -1,10 +1,7 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
-    <f:Card class="sapUiTinyMargin">
-        <f:header>
-            <card:Header xmlns:card="sap.f.cards" title="{context>/parameters/title/value}" />
-        </f:header>
-        <f:content>
-            <Text text="{context>/parameters/description/value}" class="sapUiSmallMargin" />
-        </f:content>
-    </f:Card>
+<mvc:View 
+    controllerName="com.epic.nebula.cards.simple.SimpleCard"
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns="sap.m">
+    <Title text="{cardData>/title}" />
+    <Text text="{cardData>/description}" class="sapUiSmallMargin" />
 </mvc:View>
