@@ -3,12 +3,6 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <VBox class="sapUiSmallMargin">
-        <Title text="Панель управления Хедера" />
-        <Text text="Нажми кнопку, чтобы послать сигнал через Резонантор" />
-        <Button 
-            text="Запустить импульс" 
-            press=".onSendSignal" 
-            type="Emphasized" 
-            class="sapUiSmallMarginTop" />
+        <Text text="An ash I know, Yggdrasil its name..." />
     </VBox>
 </mvc:View>

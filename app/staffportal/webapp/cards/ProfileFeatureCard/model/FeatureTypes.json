@@ -1,0 +1,14 @@
+[
+    {
+        "key": "INFO",
+        "fragment": "GeneralInfo"
+    },
+    {
+        "key": "SALARY",
+        "fragment": "SalaryDetails"
+    },
+    {
+        "key": "EQUIPMENT",
+        "fragment": "EquipmentList"
+    }
+]

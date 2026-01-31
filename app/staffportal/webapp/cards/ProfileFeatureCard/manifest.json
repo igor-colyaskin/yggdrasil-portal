@@ -1,0 +1,35 @@
+{
+  "sap.app": {
+    "id": "com.epic.yggdrasil.staffportal.cards.ProfileFeatureCard",
+    "type": "card"
+  },
+  "sap.card": {
+    "type": "Component",
+    "configuration": {
+      "parameters": {
+        "featureKey": {
+          "value": "DEFAULT",
+          "type": "string"
+        },
+        "displayTitle": {
+          "value": "Feature Block",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "sap.ui5": {
+    "componentName": "com.epic.yggdrasil.staffportal.cards.ProfileFeatureCard",
+    "routing": {
+      "config": {
+        "viewType": "XML"
+      }
+    },
+    "rootView": {
+      "viewName": "com.epic.yggdrasil.staffportal.cards.ProfileFeatureCard.ProfileFeatureCard",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    }
+  }
+}

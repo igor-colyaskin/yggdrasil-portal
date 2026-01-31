@@ -1,0 +1,6 @@
+<mvc:View
+    controllerName="com.epic.yggdrasil.staffportal.cards.ProfileFeatureCard.ProfileFeatureCard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <VBox id="featureContainer" class="sapUiSmallMargin" />
+</mvc:View>
