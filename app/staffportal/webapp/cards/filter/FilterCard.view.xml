@@ -1,0 +1,12 @@
+<mvc:View 
+    controllerName="com.epic.nebula.cards.filter.FilterCard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <VBox class="sapUiSmallMargin">
+        <Title text="{cardData>/title}" level="H2" class="sapUiSmallMarginBottom" />
+        <SearchField 
+            placeholder="Search by name..." 
+            liveChange=".onFilter"
+            width="100%" />
+    </VBox>
+</mvc:View>

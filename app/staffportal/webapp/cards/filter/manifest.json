@@ -1,6 +1,6 @@
 {
   "sap.app": {
-    "id": "com.epic.nebula.cards.simple",
+    "id": "com.epic.nebula.cards.filter",
     "type": "card"
   },
   "sap.card": {
@@ -8,18 +8,21 @@
     "configuration": {
       "parameters": {
         "title": {
-          "value": "Заголовок"
+          "value": "Filter"
         },
         "description": {
-          "value": "Описание планеты"
+          "value": ""
+        },
+        "targetId": {
+          "value": ""
         }
       }
     }
   },
   "sap.ui5": {
-    "componentName": "com.epic.nebula.cards.simple",
+    "componentName": "com.epic.nebula.cards.filter",
     "rootView": {
-      "viewName": "com.epic.nebula.cards.simple.SimpleCard",
+      "viewName": "com.epic.nebula.cards.filter.FilterCard",
       "type": "XML"
     }
   }

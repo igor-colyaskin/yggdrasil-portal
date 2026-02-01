@@ -20,13 +20,6 @@
           "value": ""
         }
       }
-    },
-    "sap.ui5": {
-      "componentName": "com.epic.nebula.cards.table",
-      "rootView": {
-        "viewName": "com.epic.nebula.cards.table.TableCard",
-        "type": "XML"
-      }
     }
   },
   "sap.ui5": {

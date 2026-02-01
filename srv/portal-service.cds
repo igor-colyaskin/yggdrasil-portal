@@ -21,6 +21,7 @@ service ProjectService @(path: '/odata/v4/projects') {
 }
 
 service PortalService @(path: '/odata/v4/portal') {
+    function getSchema(entity: String) returns String;
     entity RolePages as projection on db.PortalRoles;
     entity Pages     as projection on db.PortalPages;
 }
