@@ -50,22 +50,45 @@ sap.ui.define([
         },
 
         _assemblePage: function (sPageId) {
-            this.byId("galaxyCore").destroyItems()
-            const oParams = sPageId === "home" ?
-                { title: "Welcome", description: "Nebula Core Active" } :
-                { title: "System: Staff", description: "Data synchronized" }
-            this._forgeCard(oParams)
+            const oCore = this.byId("galaxyCore")
+            oCore.destroyItems() // Полная очистка перед сменой системы
+
+            // Карта соответствия: Tab ID -> Путь к манифесту карточки
+            const mCardRegistry = {
+                "home": "com/epic/nebula/cards/simple/manifest.json",
+                "staff": "com/epic/nebula/cards/simple/manifest.json", // Временно та же Simple
+                "admin": "com/epic/nebula/cards/simple/manifest.json"  // Временно та же Simple
+            }
+
+            const sManifestPath = mCardRegistry[sPageId] || mCardRegistry["home"]
+            const sManifestUrl = sap.ui.require.toUrl(sManifestPath)
+
+            // Данные для инициализации (потом уйдут в OData)
+            const mInitialData = {
+                "home": { title: "Центральный узел", description: "Добро пожаловать в Иггдрасиль." },
+                "staff": { title: "Сектор: Персонал", description: "База данных магических сущностей." },
+                "admin": { title: "Терминал Администратора", description: "Критический уровень доступа." }
+            }
+
+            this._forgeCard({
+                manifestUrl: sManifestUrl,
+                data: mInitialData[sPageId] || mInitialData["home"]
+            })
         },
 
-        _forgeCard: function (oParams) {
-            const oCard = new Card({
-                manifest: sap.ui.require.toUrl("com/epic/nebula/cards/simple/manifest.json"),
+        _forgeCard: function (oConfig) {
+            const oCard = new sap.ui.integration.widgets.Card({
+                manifest: oConfig.manifestUrl,
+                baseUrl: oConfig.manifestUrl.replace("manifest.json", ""),
                 host: this.getOwnerComponent().getHost(),
-                parameters: { "title": oParams.title, "description": oParams.description }
+                parameters: {
+                    "title": oConfig.data.title,
+                    "description": oConfig.data.description
+                }
             })
+
             this.byId("galaxyCore").addItem(oCard)
         },
-
         // --- IDENTITY ORACLE ---
         _openIdentityDialog: function () {
             if (!this._pIdentityDialog) {

@@ -6,33 +6,14 @@ sap.ui.define([
 
     return BaseController.extend("com.epic.nebula.cards.simple.SimpleCard", {
         onInit: function () {
-            const oView = this.getView()
+            const oCard = this.getCard() // Метод из твоего SDK
+            const oParams = oCard.getCombinedParameters() // Получаем title и description из манифеста/шелла
 
-            // 1. Создаем модель сразу
             const oModel = new JSONModel({
-                title: "Loading...",
-                description: "Synchronizing with Nebula..."
+                title: oParams.title || "Unknown",
+                description: oParams.description || ""
             })
-            oView.setModel(oModel, "cardData")
-
-            // 2. Вытаскиваем данные из "недр" контейнера
-            const oComponent = this.getOwnerComponent()
-            const oCard = oComponent.getCard ? oComponent.getCard() : null
-
-            if (oCard) {
-                oCard.attachManifestReady(function () {
-                    const oParams = oCard.getCombinedParameters()
-
-                    // Жесткая очистка: вытаскиваем только значения
-                    const oData = {
-                        title: oParams.title?.value || oParams.title || "",
-                        description: oParams.description?.value || oParams.description || ""
-                    }
-
-                    oModel.setData(oData)
-                    console.log("🛰️ Controller Force-Sync:", oData)
-                })
-            }
+            this.getView().setModel(oModel, "cardData")
         }
     })
 })
