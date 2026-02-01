@@ -23,10 +23,52 @@ sap.ui.define([
 
         _launchNebula: async function (sRole) {
             this.getModel("ui").setProperty("/currentRole", sRole)
-            const oConfig = this._mRoleConfigs[sRole] || this._mRoleConfigs["Basic"]
 
-            this._forgeNavigation(oConfig.navigation)
-            this._assemblePage("home")
+            // 1. Имитируем запрос к Configuration Service
+            try {
+                const oResponse = await fetch("./model/pages.json")
+                const oConfig = await oResponse.json()
+
+                // Сохраняем конфигурацию роли в модель
+                const oRoleConfig = oConfig.roles[sRole] || oConfig.roles["Admin"]
+                this.getModel("ui").setProperty("/pagesConfig", oRoleConfig.pages)
+
+                // 2. Формируем навигацию на основе конфига (динамически!)
+                const aNavItems = Object.keys(oRoleConfig.pages).map(sKey => ({
+                    tab: sKey,
+                    label: sKey.charAt(0).toUpperCase() + sKey.slice(1)
+                }))
+
+                this._forgeNavigation(aNavItems)
+                this._assemblePage("home")
+
+            } catch (oError) {
+                console.error("💀 Nebula Fatal: Configuration Service unreachable", oError)
+            }
+        },
+
+        _assemblePage: function (sPageId) {
+            const oCore = this.byId("galaxyCore")
+            oCore.destroyItems()
+
+            // Берем настройки конкретной страницы из загруженного конфига
+            const mPages = this.getModel("ui").getProperty("/pagesConfig")
+            const oPageData = mPages[sPageId]
+
+            if (!oPageData) return
+
+            // Создаем контейнер (VBox или HBox)
+            const oLayoutContainer = oPageData.layout === "horizontal"
+                ? new sap.m.HBox({ wrap: "Wrap" })
+                : new sap.m.VBox()
+
+            // Куем карточки по списку из конфига
+            oPageData.cards.forEach(oCardCfg => {
+                const oCard = this._forgeCard(oCardCfg)
+                oLayoutContainer.addItem(oCard)
+            })
+
+            oCore.addItem(oLayoutContainer)
         },
 
         _forgeNavigation: function (aItems) {
@@ -47,66 +89,6 @@ sap.ui.define([
                 const sTab = oEvent.getParameter("tab")
                 this._assemblePage(sTab)
             })
-        },
-
-        _assemblePage: function (sPageId) {
-            const oCore = this.byId("galaxyCore")
-            oCore.destroyItems()
-
-            // Чертежи страниц: теперь с указанием типа контейнера
-            const mPageBlueprints = {
-                "home": {
-                    layout: "vertical",
-                    cards: [
-                        { type: "simple", title: "Новости", description: "Системы стабильны." },
-                        { type: "simple", title: "Статус", description: "Резонантор 100%." }
-                    ]
-                },
-                "staff": {
-                    layout: "horizontal", // Попробуем горизонтальный ряд
-                    cards: [
-                        { type: "table", title: "Таблица", description: "Заглушка реестра." },
-                        { type: "simple", title: "Инфо", description: "Справка по кадрам." }
-                    ]
-                },
-                "admin": {
-                    layout: "vertical",
-                    cards: [
-                        { type: "simple", title: "Root Console", description: "Access granted." }
-                    ]
-                }
-            }
-
-            const oConfig = mPageBlueprints[sPageId] || mPageBlueprints["home"]
-
-            // 1. Создаем контейнер в зависимости от чертежа
-            let oLayoutContainer
-            if (oConfig.layout === "horizontal") {
-                oLayoutContainer = new sap.m.HBox({
-                    wrap: "Wrap", // Чтобы на узких экранах карточки переносились
-                    items: []
-                }).addStyleClass("sapUiSmallMarginTop")
-            } else {
-                oLayoutContainer = new sap.m.VBox({
-                    items: []
-                })
-            }
-
-            // 2. Куем карточки и кладем их в наш новый контейнер
-            oConfig.cards.forEach(oCardCfg => {
-                const oCard = this._forgeCard(oCardCfg)
-
-                // Добавляем отступы в зависимости от ориентации
-                if (oConfig.layout === "horizontal") {
-                    oCard.addStyleClass("sapUiMediumMarginEnd sapUiSmallMarginBottom")
-                } else {
-                    oCard.addStyleClass("sapUiMediumMarginBottom")
-                }
-
-                oLayoutContainer.addItem(oCard)
-            })
-
-            oCore.addItem(oLayoutContainer)
         },
 
         // Немного подправим _forgeCard, чтобы она ВОЗВРАЩАЛА карточку, а не сама её добавляла
