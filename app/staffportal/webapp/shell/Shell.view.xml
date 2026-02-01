@@ -11,7 +11,7 @@
             <content>
                 <VBox id="navContainer" />
                 <BusyIndicator id="nebulaLoader" size="3rem" class="sapUiMediumMargin" visible="false" />
-                <VBox id="galaxyCore" class="sapUiSmallMargin" />
+                <VBox id="galaxyCore" class="sapUiContentPadding" width="100%" />
             </content>
         </Page>
     </App>

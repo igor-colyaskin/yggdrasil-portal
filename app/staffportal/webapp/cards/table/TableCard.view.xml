@@ -1,0 +1,7 @@
+<mvc:View 
+    controllerName="com.epic.nebula.cards.table.TableCard"
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns="sap.m">
+    <Title text="{cardData>/title}" />
+    <Text text="{cardData>/description}" class="sapUiSmallMargin" />
+</mvc:View>

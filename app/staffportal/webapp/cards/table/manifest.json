@@ -1,0 +1,33 @@
+{
+  "sap.app": {
+    "id": "com.epic.nebula.cards.table",
+    "type": "card"
+  },
+  "sap.card": {
+    "type": "Component",
+    "configuration": {
+      "parameters": {
+        "title": {
+          "value": "Table"
+        },
+        "description": {
+          "value": "Any Table"
+        }
+      }
+    },
+    "sap.ui5": {
+      "componentName": "com.epic.nebula.cards.table",
+      "rootView": {
+        "viewName": "com.epic.nebula.cards.table.TableCard",
+        "type": "XML"
+      }
+    }
+  },
+  "sap.ui5": {
+    "componentName": "com.epic.nebula.cards.table",
+    "rootView": {
+      "viewName": "com.epic.nebula.cards.table.TableCard",
+      "type": "XML"
+    }
+  }
+}

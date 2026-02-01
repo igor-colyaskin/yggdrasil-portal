@@ -51,43 +51,84 @@ sap.ui.define([
 
         _assemblePage: function (sPageId) {
             const oCore = this.byId("galaxyCore")
-            oCore.destroyItems() // Полная очистка перед сменой системы
+            oCore.destroyItems()
 
-            // Карта соответствия: Tab ID -> Путь к манифесту карточки
-            const mCardRegistry = {
-                "home": "com/epic/nebula/cards/simple/manifest.json",
-                "staff": "com/epic/nebula/cards/simple/manifest.json", // Временно та же Simple
-                "admin": "com/epic/nebula/cards/simple/manifest.json"  // Временно та же Simple
+            // Чертежи страниц: теперь с указанием типа контейнера
+            const mPageBlueprints = {
+                "home": {
+                    layout: "vertical",
+                    cards: [
+                        { type: "simple", title: "Новости", description: "Системы стабильны." },
+                        { type: "simple", title: "Статус", description: "Резонантор 100%." }
+                    ]
+                },
+                "staff": {
+                    layout: "horizontal", // Попробуем горизонтальный ряд
+                    cards: [
+                        { type: "table", title: "Таблица", description: "Заглушка реестра." },
+                        { type: "simple", title: "Инфо", description: "Справка по кадрам." }
+                    ]
+                },
+                "admin": {
+                    layout: "vertical",
+                    cards: [
+                        { type: "simple", title: "Root Console", description: "Access granted." }
+                    ]
+                }
             }
 
-            const sManifestPath = mCardRegistry[sPageId] || mCardRegistry["home"]
-            const sManifestUrl = sap.ui.require.toUrl(sManifestPath)
+            const oConfig = mPageBlueprints[sPageId] || mPageBlueprints["home"]
 
-            // Данные для инициализации (потом уйдут в OData)
-            const mInitialData = {
-                "home": { title: "Центральный узел", description: "Добро пожаловать в Иггдрасиль." },
-                "staff": { title: "Сектор: Персонал", description: "База данных магических сущностей." },
-                "admin": { title: "Терминал Администратора", description: "Критический уровень доступа." }
+            // 1. Создаем контейнер в зависимости от чертежа
+            let oLayoutContainer
+            if (oConfig.layout === "horizontal") {
+                oLayoutContainer = new sap.m.HBox({
+                    wrap: "Wrap", // Чтобы на узких экранах карточки переносились
+                    items: []
+                }).addStyleClass("sapUiSmallMarginTop")
+            } else {
+                oLayoutContainer = new sap.m.VBox({
+                    items: []
+                })
             }
 
-            this._forgeCard({
-                manifestUrl: sManifestUrl,
-                data: mInitialData[sPageId] || mInitialData["home"]
+            // 2. Куем карточки и кладем их в наш новый контейнер
+            oConfig.cards.forEach(oCardCfg => {
+                const oCard = this._forgeCard(oCardCfg)
+
+                // Добавляем отступы в зависимости от ориентации
+                if (oConfig.layout === "horizontal") {
+                    oCard.addStyleClass("sapUiMediumMarginEnd sapUiSmallMarginBottom")
+                } else {
+                    oCard.addStyleClass("sapUiMediumMarginBottom")
+                }
+
+                oLayoutContainer.addItem(oCard)
             })
+
+            oCore.addItem(oLayoutContainer)
         },
 
+        // Немного подправим _forgeCard, чтобы она ВОЗВРАЩАЛА карточку, а не сама её добавляла
         _forgeCard: function (oConfig) {
-            const oCard = new sap.ui.integration.widgets.Card({
-                manifest: oConfig.manifestUrl,
-                baseUrl: oConfig.manifestUrl.replace("manifest.json", ""),
+            const mManifests = {
+                "simple": "com/epic/nebula/cards/simple/manifest.json",
+                "table": "com/epic/nebula/cards/table/manifest.json"
+            }
+
+            const sPath = mManifests[oConfig.type] || mManifests["simple"]
+            const sUrl = sap.ui.require.toUrl(sPath)
+
+            return new sap.ui.integration.widgets.Card({
+                manifest: sUrl,
+                baseUrl: sUrl.replace("manifest.json", ""),
                 host: this.getOwnerComponent().getHost(),
+                width: oConfig.type === "table" ? "600px" : "300px", // Разная ширина для наглядности
                 parameters: {
-                    "title": oConfig.data.title,
-                    "description": oConfig.data.description
+                    "title": oConfig.title,
+                    "description": oConfig.description
                 }
             })
-
-            this.byId("galaxyCore").addItem(oCard)
         },
         // --- IDENTITY ORACLE ---
         _openIdentityDialog: function () {
