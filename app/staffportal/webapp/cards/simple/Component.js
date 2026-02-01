@@ -28,7 +28,7 @@ sap.ui.define([
                     this._setupParameters(oCard.getCombinedParameters())
                 }
             } else {
-                console.error("🚫 Nebula Fatal: Card instance not found in ComponentData")
+                // console.error("🚫 Nebula Fatal: Card instance not found in ComponentData")
             }
         }
     })

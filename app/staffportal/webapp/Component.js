@@ -8,31 +8,36 @@ sap.ui.define([
     "use strict"
 
     return UIComponent.extend("com.epic.nebula.Component", {
-        metadata: {
-            manifest: "json"
-        },
+        metadata: { manifest: "json" },
 
         init: function () {
-            // 1. Инициализируем хранилище NEBULA_CORE
+            // 1. Сначала создаем модель состояния, чтобы Хост мог с ней работать
+            const oUiModel = new JSONModel({
+                currentRole: "",
+                currentTab: "home",
+                currentRoleConfig: { navigation: [] }
+            })
+            this.setModel(oUiModel, "ui")
+
+            // 2. Инициализируем хранилище
             StorageUtils.createStorage("NEBULA_PORTAL_2026")
 
-            // 2. Базовая инициализация
+            // 3. Базовая инициализация UIComponent
             UIComponent.prototype.init.apply(this, arguments)
 
-            // 3. Настройка Хоста (Инфраструктура Галактики)
+            // 4. Настройка Хоста
             this._setupNebulaHost()
         },
 
         _setupNebulaHost: function () {
-            // 1. Создаем Хост с фиксированным ID для глобального поиска
             this._oHost = new Host("nebulaHost")
-            this._oResonator = new sap.ui.base.EventProvider()
+            // Используем загруженный EventProvider
+            this._oResonator = new EventProvider()
 
             const oUiModel = this.getModel("ui")
 
-            // --- Shared Context: Мост между Хостом и моделью UI ---
+            // --- Shared Context ---
             this._oHost.getContext = () => {
-                // Возвращаем промис с данными всей модели "ui"
                 return Promise.resolve(oUiModel.getData())
             }
 
@@ -41,7 +46,6 @@ sap.ui.define([
                     Object.keys(mCtx).forEach(sKey => {
                         oUiModel.setProperty("/" + sKey, mCtx[sKey])
 
-                        // Persistence logic (как у тебя была)
                         const aPersistentKeys = ["selectedEmployeeID", "currentTab"]
                         if (aPersistentKeys.includes(sKey)) {
                             const sStorageKey = sKey === "selectedEmployeeID" ? "selectedID" : sKey
@@ -71,6 +75,7 @@ sap.ui.define([
                 return mDestinations[sName] || ""
             }
         },
+
         getHost: function () {
             return this._oHost
         }
