@@ -63,3 +63,16 @@ entity Bookings : cuid {
     deskNumber : String(10);
     date       : Date;
 }
+
+// --- СИСТЕМА 5: Portal Core (Конфигурация интерфейса) ---
+entity PortalRoles {
+    key ID    : String(20); // Admin, Manager, Basic
+    pages     : Composition of many PortalPages on pages.parent = $self;
+}
+
+entity PortalPages {
+    key ID     : String(30); // home, staff, admin
+    parent     : Association to PortalRoles;
+    layout     : String(20); // vertical, horizontal
+    config     : LargeString; // Массив карточек в JSON
+}

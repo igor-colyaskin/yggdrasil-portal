@@ -24,29 +24,38 @@ sap.ui.define([
         _launchNebula: async function (sRole) {
             this.getModel("ui").setProperty("/currentRole", sRole)
 
-            // 1. Имитируем запрос к Configuration Service
+            // Используем эндпоинт PortalService
+            const sUrl = "/odata/v4/portal/RolePages('" + sRole + "')?$expand=pages"
+
             try {
-                const oResponse = await fetch("./model/pages.json")
-                const oConfig = await oResponse.json()
+                const oResponse = await fetch(sUrl)
+                const oData = await oResponse.json()
 
-                // Сохраняем конфигурацию роли в модель
-                const oRoleConfig = oConfig.roles[sRole] || oConfig.roles["Admin"]
-                this.getModel("ui").setProperty("/pagesConfig", oRoleConfig.pages)
+                if (!oData || !oData.pages) throw new Error("No config found")
 
-                // 2. Формируем навигацию на основе конфига (динамически!)
-                const aNavItems = Object.keys(oRoleConfig.pages).map(sKey => ({
+                const mPages = {}
+                oData.pages.forEach(p => {
+                    mPages[p.ID] = {
+                        layout: p.layout,
+                        cards: JSON.parse(p.config) // Десериализуем JSON из строки
+                    }
+                })
+
+                this.getModel("ui").setProperty("/pagesConfig", mPages)
+
+                // Формируем табы
+                const aNavItems = Object.keys(mPages).map(sKey => ({
                     tab: sKey,
-                    label: sKey.charAt(0).toUpperCase() + sKey.slice(1)
+                    label: sKey.toUpperCase()
                 }))
 
                 this._forgeNavigation(aNavItems)
                 this._assemblePage("home")
 
             } catch (oError) {
-                console.error("💀 Nebula Fatal: Configuration Service unreachable", oError)
+                console.error("🌌 Nebula Engine: Failed to sycn with BE", oError)
             }
         },
-
         _assemblePage: function (sPageId) {
             const oCore = this.byId("galaxyCore")
             oCore.destroyItems()
