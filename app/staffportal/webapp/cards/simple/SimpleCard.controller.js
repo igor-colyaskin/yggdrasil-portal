@@ -6,14 +6,8 @@ sap.ui.define([
 
     return BaseController.extend("com.epic.nebula.cards.simple.SimpleCard", {
         onInit: function () {
-            const oCard = this.getCard() // Метод из твоего SDK
-            const oParams = oCard.getCombinedParameters() // Получаем title и description из манифеста/шелла
-
-            const oModel = new JSONModel({
-                title: oParams.title || "Unknown",
-                description: oParams.description || ""
-            })
-            this.getView().setModel(oModel, "cardData")
+            this.setupCardModel()
+            // Всё! title и description уже в модели и привязаны к View
         }
     })
 })

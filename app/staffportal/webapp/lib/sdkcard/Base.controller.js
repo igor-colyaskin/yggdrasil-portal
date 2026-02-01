@@ -1,32 +1,58 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, JSONModel) {
     "use strict"
 
     return Controller.extend("com.epic.nebula.lib.sdkcard.Base.controller", {
         getModel: function (sName) {
             return this.getView().getModel(sName) || this.getOwnerComponent().getModel(sName)
         },
-        /**
-         * Быстрый доступ к инстансу интеграционной карточки
-         */
         getCard: function () {
-            const oComponentData = this.getOwnerComponent().getComponentData()
-            if (!oComponentData) {
-                return null
+            if (this._oCardInstance) {
+                return this._oCardInstance
             }
-            // Проверяем оба варианта имени свойства
-            return oComponentData.__sapUiIntegration_card || oComponentData.card || null
+
+            const oComponentData = this.getOwnerComponent().getComponentData()
+            if (!oComponentData) return null
+
+            // Сохраняем ссылку, чтобы не искать каждый раз
+            this._oCardInstance = oComponentData.card || oComponentData.__sapUiIntegration_card || null
+            return this._oCardInstance
         },
 
         /**
-         * Получение объекта Host (epicHost) через карточку
+         * Получение объекта Host (epicHost). 
+         * Добавлена проверка на наличие обоих методов получения хоста.
          */
         getCardHost: function () {
             const oCard = this.getCard()
-            return oCard ? oCard.getHostInstance() : null
+            if (!oCard) return null
+
+            // Пробуем стандартный метод и альтернативный
+            return (oCard.getHostInstance ? oCard.getHostInstance() : oCard.getHost()) || null
         },
 
+        /**
+         * Наш новый метод унификации, о котором мы договорились
+         */
+        setupCardModel: function (oInitialData) {
+            const oCard = this.getCard()
+            if (!oCard) return
+
+            const oParams = oCard.getCombinedParameters() || {}
+
+            const oData = Object.assign({
+                title: oParams.title || "",
+                description: oParams.description || "",
+                service: oParams.service || "",
+                entity: oParams.entity || ""
+            }, oInitialData)
+
+            const oModel = new JSONModel(oData)
+            this.getView().setModel(oModel, "cardData")
+            return oModel
+        },
         /**
          * Быстрый доступ к UI-состоянию (модель "ui")
          * @param {string} sPath Путь к свойству (например, "/selectedEmployeeID")

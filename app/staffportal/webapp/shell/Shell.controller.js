@@ -104,7 +104,8 @@ sap.ui.define([
         _forgeCard: function (oConfig) {
             const mManifests = {
                 "simple": "com/epic/nebula/cards/simple/manifest.json",
-                "table": "com/epic/nebula/cards/table/manifest.json"
+                "table": "com/epic/nebula/cards/table/manifest.json",
+                "filter": "com/epic/nebula/cards/filter/manifest.json"
             }
 
             const sPath = mManifests[oConfig.type] || mManifests["simple"]
@@ -114,14 +115,15 @@ sap.ui.define([
                 manifest: sUrl,
                 baseUrl: sUrl.replace("manifest.json", ""),
                 host: this.getOwnerComponent().getHost(),
-                width: oConfig.type === "table" ? "600px" : "300px", // Разная ширина для наглядности
                 parameters: {
-                    "title": oConfig.title,
-                    "description": oConfig.description
+                    "title": oConfig.title || "",
+                    "description": oConfig.description || "",
+                    // Передаем системные параметры для OData
+                    "service": oConfig.service || "",
+                    "entity": oConfig.entity || ""
                 }
             })
-        },
-        // --- IDENTITY ORACLE ---
+        },        // --- IDENTITY ORACLE ---
         _openIdentityDialog: function () {
             if (!this._pIdentityDialog) {
                 this._pIdentityDialog = Fragment.load({

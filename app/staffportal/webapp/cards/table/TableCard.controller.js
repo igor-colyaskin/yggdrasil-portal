@@ -6,14 +6,36 @@ sap.ui.define([
 
     return BaseController.extend("com.epic.nebula.cards.table.TableCard", {
         onInit: function () {
-            const oCard = this.getCard() // Метод из твоего SDK
-            const oParams = oCard.getCombinedParameters() // Получаем title и description из манифеста/шелла
+            // 1. Одной строчкой создаем модель с параметрами + пустой массив items
+            this.setupCardModel({ items: [] })
 
-            const oModel = new JSONModel({
-                title: oParams.title || "Unknown",
-                description: oParams.description || ""
-            })
-            this.getView().setModel(oModel, "cardData")
+            // 2. Читаем параметры уже из модели (или из oParams напрямую)
+            const oData = this.getView().getModel("cardData").getData()
+
+            if (oData.service && oData.entity) {
+                this._fetchOData(oData.service, oData.entity)
+            }
+        },
+        
+        _fetchOData: async function (sServiceKey, sEntity) {
+            const oHost = this.getCardHost()
+            if (!oHost) return
+
+            // 1. Получаем реальный URL через наш Resolver в Хосте
+            const sBaseUrl = oHost.resolveDestination(sServiceKey)
+            const sFullUrl = `${sBaseUrl}/${sEntity}`
+
+            try {
+                // 2. Делаем запрос (пока через fetch для простоты v4)
+                const oResponse = await fetch(sFullUrl)
+                const oData = await oResponse.json()
+
+                // В OData v4 данные лежат в поле value
+                this.getView().getModel("cardData").setProperty("/items", oData.value || [])
+                console.log(`✅ TableCard: Loaded ${oData.value?.length} records from ${sEntity}`)
+            } catch (oError) {
+                console.error("💀 TableCard: Fetch failed", oError)
+            }
         }
     })
 })

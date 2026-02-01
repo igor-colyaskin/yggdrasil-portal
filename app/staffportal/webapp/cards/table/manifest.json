@@ -8,10 +8,16 @@
     "configuration": {
       "parameters": {
         "title": {
-          "value": "Table"
+          "value": "Default Title"
         },
         "description": {
-          "value": "Any Table"
+          "value": ""
+        },
+        "service": {
+          "value": ""
+        },
+        "entity": {
+          "value": ""
         }
       }
     },
