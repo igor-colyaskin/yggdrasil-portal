@@ -114,6 +114,24 @@ sap.ui.define([
             this.setUIProperty("currentTab", "staff")
             this.publish("Employee_Selected", { id: "" })
             console.log("🌲 [Yggdrasil SDK]: Глобальный сброс контекста")
+        },
+
+        // Добавь это в Base.controller.js
+        ensureMetadata: async function () {
+            const oData = this.getView().getModel("cardData").getData()
+            const sEntity = oData.entity
+
+            if (!sEntity) return
+
+            const oHost = this.getCardHost()
+            const oCtx = await oHost.getContext()
+
+            // Если схемы в Хосте еще нет — просим Шелл её загрузить
+            if (!oCtx[`schema-${sEntity}`]) {
+                console.log(`📡 [SDK] Схема для ${sEntity} отсутствует. Запрашиваю у Shell...`)
+                // Публикуем событие для Shell.controller.js, чтобы он вызвал _loadMetadata
+                this.publish("nebulaRequestMetadata", { entity: sEntity })
+            }
         }
     })
 })

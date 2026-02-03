@@ -19,6 +19,8 @@ sap.ui.define([
 
             const sSavedRole = localStorage.getItem("nebulaRole")
             sSavedRole ? this._launchNebula(sSavedRole) : this._openIdentityDialog()
+
+            this._loadMetadata("Staff")
         },
 
         _launchNebula: async function (sRole) {
@@ -156,5 +158,41 @@ sap.ui.define([
             location.reload() // Полная перезагрузка для чистоты Генезиса
         },
 
+        /**
+ * Загружает схему сущности с бэкенда и сохраняет в Shared Context
+ * @param {string} sEntityAlias - Краткое имя (напр. 'Staff')
+ */
+        _loadMetadata: async function (sEntityAlias) {
+            // 1. Получаем доступ к Host через владельца (Component)
+            const oHost = this.getOwnerComponent().getHost()
+
+            // ВАЖНО: Твой getContext возвращает Promise (судя по коду в Component)
+            const oFullContext = await oHost.getContext()
+            const oExistingSchema = oFullContext[`schema-${sEntityAlias}`]
+
+            if (oExistingSchema) return oExistingSchema
+
+            try {
+                const sUrl = `/odata/v4/portal/getSchema(entity='${sEntityAlias}')`
+                const oResponse = await fetch(sUrl)
+
+                if (!oResponse.ok) throw new Error(`Status: ${oResponse.status}`)
+
+                const oData = await oResponse.json()
+                const aFields = JSON.parse(oData.value)
+
+                // 2. Сохраняем через Host (твой setContext ожидает объект с ключами)
+                oHost.setContext({
+                    [`schema-${sEntityAlias}`]: aFields
+                })
+
+                console.log(`🌌 [Yggdrasil] Схема для ${sEntityAlias} загружена в Host.`)
+                return aFields
+
+            } catch (oError) {
+                console.error(`❌ [Yggdrasil] Ошибка:`, oError)
+                return null
+            }
+        }
     })
 })

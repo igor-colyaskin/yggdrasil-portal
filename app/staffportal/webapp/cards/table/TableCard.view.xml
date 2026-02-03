@@ -1,21 +1,7 @@
 <mvc:View controllerName="com.epic.nebula.cards.table.TableCard" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
     <VBox class="sapUiSmallMargin">
         <Title text="{cardData>/title}" level="H2" class="sapUiSmallMarginBottom" />
-        <Table items="{cardData>/items}" sticky="ColumnHeaders">
-            <columns>
-                <Column><Text text="Name" /></Column>
-                <Column><Text text="Position" /></Column>
-                <Column minScreenWidth="Tablet"><Text text="Level" /></Column>
-            </columns>
-            <items>
-                <ColumnListItem>
-                    <cells>
-                        <ObjectIdentifier title="{cardData>name}" text="{cardData>email}" />
-                        <Text text="{cardData>position}" />
-                        <ObjectNumber number="{cardData>level}" state="Success" />
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
+        <Table id="nebulaDynamicTable" sticky="ColumnHeaders">
+            </Table>
     </VBox>
 </mvc:View>

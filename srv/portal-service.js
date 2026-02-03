@@ -26,21 +26,41 @@ module.exports = class PortalService extends cds.ApplicationService {
             const fields = []
 
             // target.elements — это объект со всеми полями таблицы
+            // for (let name in target.elements) {
+            //     const element = target.elements[name]
+
+            //     // Пропускаем технические поля (ассоциации и системные ключи), 
+            //     // которые не нужны пользователю в фильтре или таблице
+            //     if (element.type === 'cds.Association' || name.startsWith('up_')) continue
+
+            //     fields.push({
+            //         id: name,
+            //         label: element['@Common.Label'] || name, // Берем красивое имя из метаданных или ID
+            //         type: this._mapType(element.type),       // Превращаем тип БД в тип для UI
+            //         filterable: true
+            //     })
+            // }
             for (let name in target.elements) {
                 const element = target.elements[name]
 
-                // Пропускаем технические поля (ассоциации и системные ключи), 
-                // которые не нужны пользователю в фильтре или таблице
-                if (element.type === 'cds.Association' || name.startsWith('up_')) continue
+                // Список "нежелательных" полей
+                const isTechnical = [
+                    'createdAt', 'createdBy', 'modifiedAt', 'modifiedBy',
+                    'IsActiveEntity', 'HasActiveEntity', 'HasDraftEntity'
+                ].includes(name)
+
+                // Пропускаем технические поля, ассоциации и ключи композиций
+                if (isTechnical || element.type === 'cds.Association' || name.startsWith('up_')) {
+                    continue
+                }
 
                 fields.push({
                     id: name,
-                    label: element['@Common.Label'] || name, // Берем красивое имя из метаданных или ID
-                    type: this._mapType(element.type),       // Превращаем тип БД в тип для UI
+                    label: element['@Common.Label'] || element['@title'] || name,
+                    type: this._mapType(element.type),
                     filterable: true
                 })
             }
-
             // Возвращаем результат как строку JSON
             return JSON.stringify(fields)
         })
