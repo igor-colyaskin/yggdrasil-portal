@@ -1,11 +1,42 @@
 <mvc:View 
     controllerName="com.epic.nebula.cards.filter.FilterCard"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:layout="sap.ui.layout">
+    <html:style>
+        .nebulaFilterItem {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin-right: 0.5rem !important;
+        }
+        .nebulaFilterItem .sapMLabel {
+            font-size: 0.875rem;
+            color: #6a6d70;
+            margin-top: 0.25rem;
+        }
+        .nebulaFilterItem input {
+            border-radius: 0.25rem !important;
+        }
+    </html:style>
+    
     <VBox class="sapUiSmallMargin">
         <Title text="{cardData>/title}" level="H2" class="sapUiSmallMarginBottom" />
-        <VBox id="filterFieldsContainer" />
         
-        <Button text="Применить" press=".onApplyFilters" type="Emphasized" class="sapUiSmallMarginTop" width="100%"/>
+        <FlexBox 
+            id="filterFieldsContainer" 
+            wrap="Wrap" 
+            class="nebulaFilterBar"
+            alignItems="End">
+            <items>
+                </items>
+            
+            <Button 
+                text="Go" 
+                press=".onApplyFilters" 
+                type="Emphasized" 
+                class="sapUiSmallMarginBegin" />
+        </FlexBox>
     </VBox>
 </mvc:View>

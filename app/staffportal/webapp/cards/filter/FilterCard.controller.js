@@ -22,32 +22,46 @@ sap.ui.define([
                 const aFields = oCtxData[`schema-${sEntity}`]
                 if (!aFields) return
 
+                // Сохраняем кнопку (она у нас последний элемент во FlexBox)
+                const oGoButton = oContainer.getItems().find(i => i instanceof sap.m.Button)
                 oContainer.removeAllItems()
 
                 aFields.forEach(oField => {
-                    // Создаем Label для поля
-                    oContainer.addItem(new sap.m.Label({ text: oField.label }))
+                    // Создаем вертикальный контейнер для ОДНОГО поля
+                    const oFieldBox = new sap.m.VBox({
+                        items: [
+                            new sap.m.Label({ text: oField.label, design: "Bold" }),
+                            this._createInputByFieldType(oField)
+                        ],
+                        class: "sapUiSmallMarginEnd sapUiTinyMarginBottom"
+                    }).addStyleClass("nebulaFilterItem")
 
-                    // Решаем, какой инпут создать (наш "микрочип" в действии)
-                    let oControl
-                    switch (oField.type) {
-                        case "Date":
-                            oControl = new sap.m.DatePicker({ /* настройки */ })
-                            break
-                        case "Number":
-                            oControl = new sap.m.StepInput({ /* настройки */ })
-                            break
-                        default:
-                            oControl = new sap.m.Input({ placeholder: "Введите значение..." })
-                    }
-
-                    // Привязываем значение инпута к локальной модели фильтров
-                    oControl.bindProperty("value", `filters>/${oField.id}`)
-                    oContainer.addItem(oControl)
+                    oContainer.addItem(oFieldBox)
                 })
+
+                // Возвращаем кнопку Go в конец списка
+                if (oGoButton) oContainer.addItem(oGoButton)
             })
         },
 
+        _createInputByFieldType: function (oField) {
+            let oControl
+            const sBindingPath = "filters>/" + oField.id
+
+            switch (oField.type) {
+                case "Date":
+                    oControl = new sap.m.DatePicker({ value: "{" + sBindingPath + "}" })
+                    break
+                default:
+                    oControl = new sap.m.Input({
+                        value: "{" + sBindingPath + "}",
+                        placeholder: "Search...",
+                        width: "200px" // Фиксированная ширина для аккуратности
+                    })
+            }
+            return oControl
+        },
+        
         onFilter: function (oEvent) {
             const sQuery = oEvent.getParameter("newValue")
             const oHost = this.getCardHost()
