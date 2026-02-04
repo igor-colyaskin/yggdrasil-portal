@@ -1,4 +1,4 @@
 ID;parent_ID;layout;config
 home;Admin;vertical;"[{""id"":""news"",""type"":""simple"",""title"":""System News"",""description"":""Yggdrasil Core v1.0 is online.""}]"
-staff;Admin;horizontal;"[{""id"":""f1"",""type"":""filter"",""title"":""Staff Filter"",""targetId"":""t1""},{""id"":""t1"",""type"":""table"",""title"":""Employee Registry"",""service"":""hrService"",""entity"":""Staff""}]"
+staff;Admin;horizontal;"[{""id"":""f1"",""type"":""filter"",""title"":""Staff Filter"",""targetId"":""t1"",""entity"":""Staff""},{""id"":""t1"",""type"":""table"",""title"":""Employee Registry"",""service"":""hrService"",""entity"":""Staff""}]"
 admin;Admin;vertical;"[{""id"":""a1"",""type"":""simple"",""title"":""Terminal"",""description"":""Restricted area.""}]"

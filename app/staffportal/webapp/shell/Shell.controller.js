@@ -58,6 +58,7 @@ sap.ui.define([
                 console.error("🌌 Nebula Engine: Failed to sycn with BE", oError)
             }
         },
+
         _assemblePage: function (sPageId) {
             const oCore = this.byId("galaxyCore")
             oCore.destroyItems()
@@ -125,7 +126,8 @@ sap.ui.define([
                     "entity": oConfig.entity || ""
                 }
             })
-        },        // --- IDENTITY ORACLE ---
+        },   
+             // --- IDENTITY ORACLE ---
         _openIdentityDialog: function () {
             if (!this._pIdentityDialog) {
                 this._pIdentityDialog = Fragment.load({

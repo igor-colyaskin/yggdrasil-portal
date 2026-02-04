@@ -15,6 +15,12 @@
         },
         "targetId": {
           "value": ""
+        },
+        "service": {
+          "value": ""
+        },
+        "entity": {
+          "value": ""
         }
       }
     }

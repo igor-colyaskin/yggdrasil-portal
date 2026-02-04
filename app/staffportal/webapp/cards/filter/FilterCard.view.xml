@@ -4,9 +4,8 @@
     xmlns="sap.m">
     <VBox class="sapUiSmallMargin">
         <Title text="{cardData>/title}" level="H2" class="sapUiSmallMarginBottom" />
-        <SearchField 
-            placeholder="Search by name..." 
-            liveChange=".onFilter"
-            width="100%" />
+        <VBox id="filterFieldsContainer" />
+        
+        <Button text="Применить" press=".onApplyFilters" type="Emphasized" class="sapUiSmallMarginTop" width="100%"/>
     </VBox>
 </mvc:View>
